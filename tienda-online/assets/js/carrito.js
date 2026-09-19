@@ -10,7 +10,7 @@ function renderizarCarrito() {
     } else {
         contenedor.innerHTML = carrito.map(item => `
             <div class="item-carrito">
-                <div class="imagen-producto">📦</div>
+                <div class="imagen-producto">${imagenProductoHtml(item)}</div>
                 <div class="info">
                     <div class="nombre">${item.nombre}</div>
                     <div class="precio-unitario">Q${item.precio.toFixed(2)} c/u</div>
@@ -39,6 +39,11 @@ function cambiarCantidad(idProducto, delta) {
 
 function quitarDelCarrito(idProducto) {
     eliminarDelCarrito(idProducto);
+    renderizarCarrito();
+}
+
+function vaciarYRenderizar() {
+    vaciarCarrito();
     renderizarCarrito();
 }
 

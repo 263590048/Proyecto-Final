@@ -33,13 +33,14 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Precio</th>
+                        <th>Oferta</th>
                         <th>Stock</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpo-tabla-productos">
-                    <tr><td colspan="6">Cargando productos...</td></tr>
+                    <tr><td colspan="7">Cargando productos...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -67,12 +68,20 @@
                 <input type="number" name="precio" step="0.01" required min="0">
             </label>
             <label>
+                Precio de oferta (opcional)
+                <input type="number" name="precio_oferta" step="0.01" min="0">
+            </label>
+            <label>
                 Cantidad
                 <input type="number" name="cantidad" required min="0">
             </label>
             <label>
                 Imagen (nombre de archivo)
                 <input type="text" name="imagen">
+            </label>
+            <label>
+                Imagen 2 (nombre de archivo, opcional)
+                <input type="text" name="imagen2">
             </label>
             <label>
                 Estado

@@ -24,16 +24,77 @@
         <nav>
             <a href="index.php" class="activo">Inicio</a>
             <a href="productos.php">Catálogo</a>
-            <a href="carrito.php">Carrito (<span id="contador-carrito">0</span>)</a>
+            <div class="menu-carrito">
+                <button class="btn-carrito-nav" onclick="toggleMenuCarrito(event)">Carrito (<span id="contador-carrito">0</span>)</button>
+                <div class="panel-carrito-mini" id="panel-carrito-mini"></div>
+            </div>
             <a href="login.php" class="boton">Iniciar sesión</a>
         </nav>
     </header>
 
-    <main>
+    <main style="padding-bottom: 0;">
         <div style="border-radius: 12px; background: linear-gradient(120deg, #1a2a4a, #2b4577); color: #fff; padding: 3rem; margin-bottom: 2.5rem;">
             <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem;">La mejor tecnología, al mejor precio</h1>
             <p style="color: #c7d0e0;">Celulares, laptops, audífonos y más — envío a todo el país.</p>
         </div>
+
+        <div class="franja-promos">
+            <div class="promo-item">
+                <span>♻️</span>
+                <div>
+                    <h3>Programa Trade-In</h3>
+                    <p>Entrega tu equipo usado como parte de pago.</p>
+                </div>
+            </div>
+            <div class="promo-item">
+                <span>💳</span>
+                <div>
+                    <h3>Compra a cuotas</h3>
+                    <p>Aceptamos VisaCuotas en tu compra.</p>
+                </div>
+            </div>
+            <div class="promo-item">
+                <span>🚛</span>
+                <div>
+                    <h3>Pago contra entrega</h3>
+                    <p>Disponible a nivel nacional.</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="seccion-productos seccion-ofertas">
+            <div class="encabezado-seccion">
+                <h2>🔥 Ofertas del mes</h2>
+                <a class="ver-mas" href="productos.php">Ver todos ›</a>
+            </div>
+            <div class="carrusel-destacados">
+                <div class="carrusel-pista" id="grid-ofertas">
+                    <p>Cargando productos...</p>
+                </div>
+                <button class="carrusel-flecha carrusel-flecha-izq" onclick="moverCarruselOfertas(-1)" aria-label="Anterior">‹</button>
+                <button class="carrusel-flecha carrusel-flecha-der" onclick="moverCarruselOfertas(1)" aria-label="Siguiente">›</button>
+            </div>
+        </section>
+
+        <section class="seccion-productos seccion-destacados">
+            <div class="encabezado-seccion">
+                <h2>⭐ Productos destacados</h2>
+                <a class="ver-mas" href="productos.php">Ver todos ›</a>
+            </div>
+            <div class="grid-destacados-fijo" id="grid-destacados">
+                <p>Cargando productos...</p>
+            </div>
+        </section>
+
+        <section class="seccion-productos seccion-nuevos">
+            <div class="encabezado-seccion">
+                <h2>🆕 Ingreso nuevo</h2>
+                <a class="ver-mas" href="productos.php">Ver todos ›</a>
+            </div>
+            <div class="lista-nuevos" id="grid-nuevos">
+                <p>Cargando productos...</p>
+            </div>
+        </section>
 
         <div class="franja-confianza">
             <div class="item-confianza">
@@ -65,86 +126,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="franja-promos">
-            <div class="promo-item">
-                <span>♻️</span>
-                <div>
-                    <h3>Programa Trade-In</h3>
-                    <p>Entrega tu equipo usado como parte de pago.</p>
-                </div>
-            </div>
-            <div class="promo-item">
-                <span>💳</span>
-                <div>
-                    <h3>Compra a cuotas</h3>
-                    <p>Aceptamos VisaCuotas en tu compra.</p>
-                </div>
-            </div>
-            <div class="promo-item">
-                <span>🚛</span>
-                <div>
-                    <h3>Pago contra entrega</h3>
-                    <p>Disponible a nivel nacional.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="encabezado-seccion">
-            <h2>Productos destacados</h2>
-            <a class="ver-mas" href="productos.php">Ver todos ›</a>
-        </div>
-        <div class="carrusel-destacados">
-            <div class="carrusel-pista" id="grid-destacados">
-                <p>Cargando productos...</p>
-            </div>
-            <button class="carrusel-flecha carrusel-flecha-izq" onclick="moverCarrusel(-1)" aria-label="Anterior">‹</button>
-            <button class="carrusel-flecha carrusel-flecha-der" onclick="moverCarrusel(1)" aria-label="Siguiente">›</button>
-        </div>
-
-        <section class="seccion-nosotros">
-            <div class="encabezado-seccion">
-                <h2>¿Quiénes somos?</h2>
-            </div>
-            <p class="nosotros-intro">En TechStore llevamos la mejor tecnología a cada rincón de Guatemala. Somos una tienda en línea especializada en celulares, laptops, audífonos y accesorios, comprometidos con ofrecer productos de calidad, precios justos y un servicio cercano a nuestros clientes.</p>
-            <div class="nosotros-columnas">
-                <div>
-                    <h3>🎯 Misión</h3>
-                    <p>Ofrecer a los guatemaltecos acceso fácil y confiable a tecnología de calidad, con un servicio ágil y cercano que se adapte a sus necesidades.</p>
-                </div>
-                <div>
-                    <h3>🚀 Visión</h3>
-                    <p>Ser la tienda de tecnología en línea líder en Guatemala, reconocida por la confianza de nuestros clientes y la calidad de nuestro servicio.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="seccion-contacto">
-            <div class="mapa-ubicacion">
-                <iframe
-                    src="https://www.google.com/maps?q=6a+Avenida+12-34+Zona+10+Ciudad+de+Guatemala&output=embed"
-                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                    title="Ubicación de TechStore en Guatemala"></iframe>
-            </div>
-
-            <form class="formulario formulario-contacto" id="form-contacto">
-                <h3 style="color: var(--azul-oscuro);">Escríbenos</h3>
-                <label>
-                    Nombre
-                    <input type="text" name="nombre" required>
-                </label>
-                <label>
-                    Correo
-                    <input type="email" name="correo" required>
-                </label>
-                <label>
-                    Mensaje
-                    <textarea name="mensaje" rows="4" required></textarea>
-                </label>
-                <p class="mensaje-exito" id="mensaje-contacto"></p>
-                <button type="submit" class="btn-acento">Enviar mensaje</button>
-            </form>
-        </section>
     </main>
 
     <footer class="footer-tienda">
@@ -153,10 +134,10 @@
                 <a href="index.php" class="logo"><img src="assets/img/logo.png" alt="TechStore" class="logo-img"></a>
                 <p>Tu tienda de tecnología en Guatemala: celulares, laptops, audífonos y más.</p>
                 <div class="footer-redes">
-                    <a href="https://facebook.com/techstoregt" target="_blank" rel="noopener" aria-label="Facebook">📘</a>
-                    <a href="https://instagram.com/techstoregt" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
-                    <a href="https://wa.me/50223456789" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
-                    <a href="https://tiktok.com/@techstoregt" target="_blank" rel="noopener" aria-label="TikTok">🎵</a>
+                    <a href="https://facebook.com/techstoregt" target="_blank" rel="noopener" aria-label="Facebook"><img src="assets/img/redes/facebook.png" alt="Facebook"></a>
+                    <a href="https://instagram.com/techstoregt" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/img/redes/instagram.png" alt="Instagram"></a>
+                    <a href="https://wa.me/50223456789" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="assets/img/redes/whatsapp.png" alt="WhatsApp"></a>
+                    <a href="https://tiktok.com/@techstoregt" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/img/redes/tiktok.png" alt="TikTok"></a>
                 </div>
             </div>
 
@@ -165,6 +146,7 @@
                 <a href="index.php">Inicio</a>
                 <a href="productos.php">Catálogo</a>
                 <a href="carrito.php">Carrito</a>
+                <a href="nosotros.php">Quiénes somos</a>
                 <a href="login.php">Iniciar sesión</a>
             </div>
 

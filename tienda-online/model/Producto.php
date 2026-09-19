@@ -25,10 +25,23 @@ class Producto
         return $producto ?: null;
     }
 
+    private function normalizarDatos(array $datos): array
+    {
+        foreach (['precio_oferta', 'imagen2'] as $campo) {
+            $datos[$campo] = $datos[$campo] ?? null;
+            if ($datos[$campo] === '') {
+                $datos[$campo] = null;
+            }
+        }
+        return $datos;
+    }
+
     public function crear(array $datos): int
     {
-        $sql = 'INSERT INTO productos (id_categoria, nombre, descripcion, precio, cantidad, imagen, estado)
-                VALUES (:id_categoria, :nombre, :descripcion, :precio, :cantidad, :imagen, :estado)';
+        $datos = $this->normalizarDatos($datos);
+
+        $sql = 'INSERT INTO productos (id_categoria, nombre, descripcion, precio, precio_oferta, cantidad, imagen, imagen2, estado)
+                VALUES (:id_categoria, :nombre, :descripcion, :precio, :precio_oferta, :cantidad, :imagen, :imagen2, :estado)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($datos);
         return (int) $this->pdo->lastInsertId();
@@ -36,9 +49,12 @@ class Producto
 
     public function actualizar(int $id, array $datos): bool
     {
+        $datos = $this->normalizarDatos($datos);
+
         $sql = 'UPDATE productos
                 SET id_categoria = :id_categoria, nombre = :nombre, descripcion = :descripcion,
-                    precio = :precio, cantidad = :cantidad, imagen = :imagen, estado = :estado
+                    precio = :precio, precio_oferta = :precio_oferta, cantidad = :cantidad,
+                    imagen = :imagen, imagen2 = :imagen2, estado = :estado
                 WHERE id_producto = :id';
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($datos + ['id' => $id]);

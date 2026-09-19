@@ -9,7 +9,7 @@ async function cargarTablaProductos() {
         const productos = await respuesta.json();
 
         if (productos.length === 0) {
-            cuerpo.innerHTML = '<tr><td colspan="6">No hay productos registrados.</td></tr>';
+            cuerpo.innerHTML = '<tr><td colspan="7">No hay productos registrados.</td></tr>';
             return;
         }
 
@@ -18,6 +18,7 @@ async function cargarTablaProductos() {
                 <td>${producto.id_producto}</td>
                 <td>${producto.nombre}</td>
                 <td>Q${Number(producto.precio).toFixed(2)}</td>
+                <td>${producto.precio_oferta ? 'Q' + Number(producto.precio_oferta).toFixed(2) : '—'}</td>
                 <td>${producto.cantidad}</td>
                 <td>${producto.estado}</td>
                 <td class="acciones">
@@ -27,7 +28,7 @@ async function cargarTablaProductos() {
             </tr>
         `).join('');
     } catch (error) {
-        cuerpo.innerHTML = '<tr><td colspan="6">No se pudieron cargar los productos.</td></tr>';
+        cuerpo.innerHTML = '<tr><td colspan="7">No se pudieron cargar los productos.</td></tr>';
         console.error(error);
     }
 }

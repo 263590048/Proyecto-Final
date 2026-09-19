@@ -30,7 +30,10 @@
     </header>
 
     <main>
-        <h2 style="margin-bottom: 1.5rem; color: var(--azul-oscuro);">Mi carrito</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="color: var(--azul-oscuro);">Mi carrito</h2>
+            <button class="btn-peligro-solido" onclick="vaciarYRenderizar()">🗑️ Vaciar carrito</button>
+        </div>
 
         <div class="layout-carrito">
             <div id="items-carrito" style="flex-grow: 1;">
@@ -54,10 +57,10 @@
                 <a href="index.php" class="logo"><img src="assets/img/logo.png" alt="TechStore" class="logo-img"></a>
                 <p>Tu tienda de tecnología en Guatemala: celulares, laptops, audífonos y más.</p>
                 <div class="footer-redes">
-                    <a href="https://facebook.com/techstoregt" target="_blank" rel="noopener" aria-label="Facebook">📘</a>
-                    <a href="https://instagram.com/techstoregt" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
-                    <a href="https://wa.me/50223456789" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
-                    <a href="https://tiktok.com/@techstoregt" target="_blank" rel="noopener" aria-label="TikTok">🎵</a>
+                    <a href="https://facebook.com/techstoregt" target="_blank" rel="noopener" aria-label="Facebook"><img src="assets/img/redes/facebook.png" alt="Facebook"></a>
+                    <a href="https://instagram.com/techstoregt" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/img/redes/instagram.png" alt="Instagram"></a>
+                    <a href="https://wa.me/50223456789" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="assets/img/redes/whatsapp.png" alt="WhatsApp"></a>
+                    <a href="https://tiktok.com/@techstoregt" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/img/redes/tiktok.png" alt="TikTok"></a>
                 </div>
             </div>
 
@@ -66,6 +69,7 @@
                 <a href="index.php">Inicio</a>
                 <a href="productos.php">Catálogo</a>
                 <a href="carrito.php">Carrito</a>
+                <a href="nosotros.php">Quiénes somos</a>
                 <a href="login.php">Iniciar sesión</a>
             </div>
 

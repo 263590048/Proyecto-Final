@@ -28,8 +28,10 @@ CREATE TABLE productos (
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10,2) NOT NULL,
+    precio_oferta DECIMAL(10,2),
     cantidad INT NOT NULL DEFAULT 0,
     imagen VARCHAR(255),
+    imagen2 VARCHAR(255),
     estado ENUM('activo', 'inactivo') NOT NULL DEFAULT 'activo',
     FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
 );
@@ -149,6 +151,93 @@ INSERT INTO productos (id_categoria, nombre, descripcion, precio, cantidad, imag
 (6, 'Base refrigerante para laptop', 'Con ventiladores, hasta 17"', 199.00, 12, 'base_refrigerante.jpg', 'activo'),
 (6, 'Cable USB-C a Lightning', '1 metro, carga rápida', 79.00, 40, 'cable_usbc_lightning.jpg', 'activo'),
 (6, 'Hub USB-C multipuerto', '7 en 1, HDMI, USB 3.0, lector SD', 249.00, 18, 'hub_usbc.jpg', 'activo');
+
+-- Ofertas del mes (precio_oferta de ejemplo en algunos productos)
+UPDATE productos SET precio_oferta = 2199.00 WHERE nombre = 'Celular Galaxy A54';
+UPDATE productos SET precio_oferta = 1899.00 WHERE nombre = 'Samsung Galaxy A34';
+UPDATE productos SET precio_oferta = 3499.00 WHERE nombre = 'Laptop Lenovo IdeaPad 3';
+UPDATE productos SET precio_oferta = 3299.00 WHERE nombre = 'Acer Aspire 5';
+UPDATE productos SET precio_oferta = 199.00 WHERE nombre = 'Audífonos JBL Tune 510BT';
+UPDATE productos SET precio_oferta = 329.00 WHERE nombre = 'Sony WF-C500';
+UPDATE productos SET precio_oferta = 999.00 WHERE nombre = 'Tablet Samsung Galaxy Tab A9';
+UPDATE productos SET precio_oferta = 249.00 WHERE nombre = 'Smartwatch Xiaomi Mi Band 8';
+UPDATE productos SET precio_oferta = 69.00 WHERE nombre = 'Mouse Logitech M170';
+UPDATE productos SET precio_oferta = 159.00 WHERE nombre = 'Power Bank Xiaomi 10000mAh';
+
+-- Nombres de archivo de imagen reales (extensión distinta a la asumida originalmente)
+UPDATE productos SET imagen = 'hp_pavilion.png' WHERE imagen = 'hp_pavilion.jpg';
+UPDATE productos SET imagen = 'tab_a9.png' WHERE imagen = 'tab_a9.jpg';
+UPDATE productos SET imagen = 'redmi_note13.png' WHERE imagen = 'redmi_note13.jpg';
+UPDATE productos SET imagen = 'galaxy_a34.webp' WHERE imagen = 'galaxy_a34.jpg';
+UPDATE productos SET imagen = 'iphone15.webp' WHERE imagen = 'iphone15.jpg';
+UPDATE productos SET imagen = 'macbook_air_m2.webp' WHERE imagen = 'macbook_air_m2.jpg';
+UPDATE productos SET imagen = 'thinkpad_e14.png' WHERE imagen = 'thinkpad_e14.jpg';
+UPDATE productos SET imagen = 'hp_envy_x360.png' WHERE imagen = 'hp_envy_x360.jpg';
+UPDATE productos SET imagen = 'airpods_pro2.png' WHERE imagen = 'airpods_pro2.jpg';
+UPDATE productos SET imagen = 'logitech_zone300.png' WHERE imagen = 'logitech_zone300.jpg';
+UPDATE productos SET imagen = 'ipad_10gen.png' WHERE imagen = 'ipad_10gen.jpg';
+UPDATE productos SET imagen = 'lenovo_tab_m10.webp' WHERE imagen = 'lenovo_tab_m10.jpg';
+UPDATE productos SET imagen = 'galaxy_tab_s9.webp' WHERE imagen = 'galaxy_tab_s9.jpg';
+UPDATE productos SET imagen = 'ipad_mini6.jpeg' WHERE imagen = 'ipad_mini6.jpg';
+UPDATE productos SET imagen = 'fire_hd10.webp' WHERE imagen = 'fire_hd10.jpg';
+UPDATE productos SET imagen = 'amazfit_bip5.png' WHERE imagen = 'amazfit_bip5.jpg';
+UPDATE productos SET imagen = 'apple_watch_s9.png' WHERE imagen = 'apple_watch_s9.jpg';
+UPDATE productos SET imagen = 'galaxy_watch_fe.png' WHERE imagen = 'galaxy_watch_fe.jpg';
+UPDATE productos SET imagen = 'logitech_k380.png' WHERE imagen = 'logitech_k380.jpg';
+UPDATE productos SET imagen = 'anker_20w.webp' WHERE imagen = 'anker_20w.jpg';
+UPDATE productos SET imagen = 'powerbank_xiaomi.webp' WHERE imagen = 'powerbank_xiaomi.jpg';
+UPDATE productos SET imagen = 'manos_libres.webp' WHERE imagen = 'manos_libres.jpg';
+UPDATE productos SET imagen = 'mochila_targus.webp' WHERE imagen = 'mochila_targus.jpg';
+UPDATE productos SET imagen = 'base_refrigerante.jpeg' WHERE imagen = 'base_refrigerante.jpg';
+UPDATE productos SET imagen = 'hub_usbc.png' WHERE imagen = 'hub_usbc.jpg';
+
+-- Segunda foto (imagen2) para la galería del detalle, cuando hay una foto distinta disponible
+UPDATE productos SET imagen2 = 'galaxy_a54_2.jpg' WHERE imagen = 'galaxy_a54.jpg';
+UPDATE productos SET imagen2 = 'iphone13_2.jpeg' WHERE imagen = 'iphone13.jpg';
+UPDATE productos SET imagen2 = 'lenovo_ideapad3_2.jpg' WHERE imagen = 'lenovo_ideapad3.jpg';
+UPDATE productos SET imagen2 = 'hp_pavilion_2.png' WHERE imagen = 'hp_pavilion.png';
+UPDATE productos SET imagen2 = 'jbl_tune510_2.jpg' WHERE imagen = 'jbl_tune510.jpg';
+UPDATE productos SET imagen2 = 'miband8_2.jpg' WHERE imagen = 'miband8.jpg';
+UPDATE productos SET imagen2 = 'redmi_note13_2.png' WHERE imagen = 'redmi_note13.png';
+UPDATE productos SET imagen2 = 'moto_edge40_2.jpg' WHERE imagen = 'moto_edge40.jpg';
+UPDATE productos SET imagen2 = 'galaxy_a34_2.webp' WHERE imagen = 'galaxy_a34.webp';
+UPDATE productos SET imagen2 = 'poco_x6_2.jpg' WHERE imagen = 'poco_x6.jpg';
+UPDATE productos SET imagen2 = 'iphone_se_2.jpeg' WHERE imagen = 'iphone_se.jpg';
+UPDATE productos SET imagen2 = 'huawei_nova11_2.jpg' WHERE imagen = 'huawei_nova11.jpg';
+UPDATE productos SET imagen2 = 'macbook_air_m2_2.webp' WHERE imagen = 'macbook_air_m2.webp';
+UPDATE productos SET imagen2 = 'dell_inspiron15_2.jpg' WHERE imagen = 'dell_inspiron15.jpg';
+UPDATE productos SET imagen2 = 'acer_aspire5_2.jpg' WHERE imagen = 'acer_aspire5.jpg';
+UPDATE productos SET imagen2 = 'thinkpad_e14_2.avif' WHERE imagen = 'thinkpad_e14.png';
+UPDATE productos SET imagen2 = 'dell_xps13_2.jpg' WHERE imagen = 'dell_xps13.jpg';
+UPDATE productos SET imagen2 = 'sony_wh1000xm4_2.jpg' WHERE imagen = 'sony_wh1000xm4.jpg';
+UPDATE productos SET imagen2 = 'airpods_pro2_2.png' WHERE imagen = 'airpods_pro2.png';
+UPDATE productos SET imagen2 = 'galaxy_buds2_2.jpg' WHERE imagen = 'galaxy_buds2.jpg';
+UPDATE productos SET imagen2 = 'redmi_buds4_2.jpg' WHERE imagen = 'redmi_buds4.jpg';
+UPDATE productos SET imagen2 = 'beats_studio_buds_2.webp' WHERE imagen = 'beats_studio_buds.jpg';
+UPDATE productos SET imagen2 = 'sony_wfc500_2.jpg' WHERE imagen = 'sony_wfc500.jpg';
+UPDATE productos SET imagen2 = 'logitech_zone300_2.png' WHERE imagen = 'logitech_zone300.png';
+UPDATE productos SET imagen2 = 'ipad_10gen_2.png' WHERE imagen = 'ipad_10gen.png';
+UPDATE productos SET imagen2 = 'ipad_air_m1_2.jpg' WHERE imagen = 'ipad_air_m1.jpg';
+UPDATE productos SET imagen2 = 'lenovo_tab_m10_2.webp' WHERE imagen = 'lenovo_tab_m10.webp';
+UPDATE productos SET imagen2 = 'xiaomi_pad6_2.jpg' WHERE imagen = 'xiaomi_pad6.jpg';
+UPDATE productos SET imagen2 = 'ipad_mini6_2.jpeg' WHERE imagen = 'ipad_mini6.jpeg';
+UPDATE productos SET imagen2 = 'huawei_matepad11_2.jpg' WHERE imagen = 'huawei_matepad11.jpg';
+UPDATE productos SET imagen2 = 'galaxy_tab_a8_2.jpg' WHERE imagen = 'galaxy_tab_a8.jpg';
+UPDATE productos SET imagen2 = 'apple_watch_se_2.jpg' WHERE imagen = 'apple_watch_se.jpg';
+UPDATE productos SET imagen2 = 'galaxy_watch6_2.jpg' WHERE imagen = 'galaxy_watch6.jpg';
+UPDATE productos SET imagen2 = 'amazfit_bip5_2.png' WHERE imagen = 'amazfit_bip5.png';
+UPDATE productos SET imagen2 = 'xiaomi_watch_s1_2.jpg' WHERE imagen = 'xiaomi_watch_s1.jpg';
+UPDATE productos SET imagen2 = 'huawei_watch_fit3_2.jpg' WHERE imagen = 'huawei_watch_fit3.jpg';
+UPDATE productos SET imagen2 = 'apple_watch_s9_2.png' WHERE imagen = 'apple_watch_s9.png';
+UPDATE productos SET imagen2 = 'galaxy_watch_fe_2.png' WHERE imagen = 'galaxy_watch_fe.png';
+UPDATE productos SET imagen2 = 'logitech_k380_2.png' WHERE imagen = 'logitech_k380.png';
+UPDATE productos SET imagen2 = 'anker_20w_2.jpg' WHERE imagen = 'anker_20w.webp';
+UPDATE productos SET imagen2 = 'funda_iphone15_2.jpg' WHERE imagen = 'funda_iphone15.jpg';
+UPDATE productos SET imagen2 = 'manos_libres_2.webp' WHERE imagen = 'manos_libres.webp';
+UPDATE productos SET imagen2 = 'mochila_targus_2.webp' WHERE imagen = 'mochila_targus.webp';
+UPDATE productos SET imagen2 = 'base_refrigerante_2.jpeg' WHERE imagen = 'base_refrigerante.jpeg';
+UPDATE productos SET imagen2 = 'cable_usbc_lightning_2.webp' WHERE imagen = 'cable_usbc_lightning.jpg';
+UPDATE productos SET imagen2 = 'hub_usbc_2.png' WHERE imagen = 'hub_usbc.png';
 
 INSERT INTO usuarios (nombre, apellido, correo, password, telefono, direccion, tipo_usuario) VALUES
 ('Admin', 'Sistema', 'admin@techstore.com', '$2y$10$examplehashvalueaquiXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', '00000000', 'Oficina central', 'administrador');

@@ -70,10 +70,10 @@ function renderizarProductos(productos) {
     contenedor.innerHTML = productos.map(producto => `
         <div class="tarjeta-producto">
             <a href="producto.php?id=${producto.id_producto}">
-                <div class="imagen-producto">📦</div>
+                <div class="imagen-producto">${imagenProductoHtml(producto)}</div>
                 <h3>${producto.nombre}</h3>
             </a>
-            <p class="precio">Q${Number(producto.precio).toFixed(2)}</p>
+            ${renderizarPrecioHtml(producto)}
             ${Number(producto.cantidad) > 0
                 ? `<button onclick="agregarYAvisar(${producto.id_producto})">Agregar al carrito</button>`
                 : `<p class="sin-stock">Sin stock</p>`}

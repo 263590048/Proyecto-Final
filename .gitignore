@@ -1,1 +1,5 @@
 .DS_Store
+
+# Carpeta de trabajo con fotos en bruto (duplicados y descartes antes de
+# organizarlas en tienda-online/assets/img/); no es parte del sitio.
+/Imagenes/

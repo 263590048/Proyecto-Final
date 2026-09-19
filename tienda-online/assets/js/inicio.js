@@ -1,28 +1,69 @@
-// Página de inicio: muestra productos destacados, 2 por categoría (RF04)
+// Página de inicio: ofertas del mes (carrusel), destacados (grilla fija) e ingreso nuevo (lista) (RF04)
 
-async function cargarDestacados() {
-    const contenedor = document.getElementById('grid-destacados');
-
+async function cargarSeccionesProductos() {
     try {
         const respuesta = await fetch('api/productos.php');
         if (!respuesta.ok) throw new Error('La API respondió con error');
         const productos = await respuesta.json();
-        const destacados = seleccionarDestacadosPorCategoria(productos, 2);
 
-        contenedor.innerHTML = destacados.map(producto => `
-            <div class="tarjeta-producto">
-                <a href="producto.php?id=${producto.id_producto}">
-                    <div class="imagen-producto">📦</div>
-                    <h3>${producto.nombre}</h3>
-                </a>
-                <p class="precio">Q${Number(producto.precio).toFixed(2)}</p>
-                <button onclick='agregarAlCarrito(${JSON.stringify(producto)})'>Agregar al carrito</button>
-            </div>
-        `).join('');
+        renderizarCarrusel('grid-ofertas', productos.filter(producto => producto.precio_oferta));
+        renderizarGrillaFija('grid-destacados', seleccionarDestacadosPorCategoria(productos, 2).slice(0, 4));
+        renderizarListaNuevos('grid-nuevos', [...productos].sort((a, b) => b.id_producto - a.id_producto).slice(0, 5));
     } catch (error) {
-        contenedor.innerHTML = '<p>No se pudieron cargar los productos.</p>';
+        ['grid-destacados', 'grid-ofertas', 'grid-nuevos'].forEach(id => {
+            const contenedor = document.getElementById(id);
+            if (contenedor) contenedor.innerHTML = '<p>No se pudieron cargar los productos.</p>';
+        });
         console.error(error);
     }
+}
+
+function renderizarCarrusel(idContenedor, productos) {
+    const contenedor = document.getElementById(idContenedor);
+    if (!contenedor) return;
+
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<p>No hay productos para mostrar por ahora.</p>';
+        return;
+    }
+
+    contenedor.innerHTML = productos.map(renderizarTarjetaProductoHtml).join('');
+}
+
+function renderizarGrillaFija(idContenedor, productos) {
+    const contenedor = document.getElementById(idContenedor);
+    if (!contenedor) return;
+
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<p>No hay productos para mostrar por ahora.</p>';
+        return;
+    }
+
+    contenedor.innerHTML = productos.map(renderizarTarjetaProductoHtml).join('');
+}
+
+function renderizarListaNuevos(idContenedor, productos) {
+    const contenedor = document.getElementById(idContenedor);
+    if (!contenedor) return;
+
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<p>No hay productos para mostrar por ahora.</p>';
+        return;
+    }
+
+    contenedor.innerHTML = productos.map(producto => `
+        <div class="item-nuevo">
+            <div class="imagen-producto">${imagenProductoHtml(producto)}</div>
+            <div class="info-nuevo">
+                <span class="etiqueta-nuevo">NUEVO</span>
+                <h3>${producto.nombre}</h3>
+                ${renderizarPrecioHtml(producto)}
+            </div>
+            ${Number(producto.cantidad) > 0
+                ? `<button onclick='agregarAlCarrito(${JSON.stringify(producto)})'>Agregar</button>`
+                : `<p class="sin-stock">Sin stock</p>`}
+        </div>
+    `).join('');
 }
 
 function seleccionarDestacadosPorCategoria(productos, cantidadPorCategoria) {
@@ -39,8 +80,10 @@ function seleccionarDestacadosPorCategoria(productos, cantidadPorCategoria) {
     return Object.values(porCategoria).flat();
 }
 
-function moverCarrusel(direccion) {
-    const pista = document.getElementById('grid-destacados');
+function moverCarruselOfertas(direccion) {
+    const pista = document.getElementById('grid-ofertas');
+    if (!pista) return;
+
     const tarjeta = pista.querySelector('.tarjeta-producto');
     const distancia = tarjeta ? tarjeta.offsetWidth + 24 : 240;
     pista.scrollBy({ left: distancia * direccion, behavior: 'smooth' });
@@ -51,14 +94,14 @@ let intervaloCarrusel = null;
 function iniciarAutoAvanceCarrusel() {
     detenerAutoAvanceCarrusel();
     intervaloCarrusel = setInterval(() => {
-        const pista = document.getElementById('grid-destacados');
+        const pista = document.getElementById('grid-ofertas');
         if (!pista) return;
 
         const llegoAlFinal = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 5;
         if (llegoAlFinal) {
             pista.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
-            moverCarrusel(1);
+            moverCarruselOfertas(1);
         }
     }, 4000);
 }
@@ -70,20 +113,10 @@ function detenerAutoAvanceCarrusel() {
     }
 }
 
-// TODO: enviar el formulario a un endpoint real (correo o backend) cuando esté disponible
-const formContacto = document.getElementById('form-contacto');
-if (formContacto) {
-    formContacto.addEventListener('submit', (evento) => {
-        evento.preventDefault();
-        document.getElementById('mensaje-contacto').textContent = '¡Gracias! Te contactaremos pronto.';
-        formContacto.reset();
-    });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    cargarDestacados();
+    cargarSeccionesProductos();
 
-    const carrusel = document.querySelector('.carrusel-destacados');
+    const carrusel = document.querySelector('.seccion-ofertas .carrusel-destacados');
     if (carrusel) {
         carrusel.addEventListener('mouseenter', detenerAutoAvanceCarrusel);
         carrusel.addEventListener('mouseleave', iniciarAutoAvanceCarrusel);
