@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechStore</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
 </head>
 <body>
     <header>
@@ -32,11 +32,36 @@
         </nav>
     </header>
 
-    <main style="padding-bottom: 0;">
-        <div style="border-radius: 12px; background: linear-gradient(120deg, #1a2a4a, #2b4577); color: #fff; padding: 3rem; margin-bottom: 2.5rem;">
-            <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem;">La mejor tecnología, al mejor precio</h1>
-            <p style="color: #c7d0e0;">Celulares, laptops, audífonos y más — envío a todo el país.</p>
-        </div>
+    <main class="inicio">
+        <section class="hero-inicio" aria-labelledby="titulo-principal">
+            <div class="hero-contenido">
+                <p class="hero-etiqueta">Tecnología que te acompaña</p>
+                <h1 id="titulo-principal">Encuentra el equipo ideal para tu día a día.</h1>
+                <p class="hero-descripcion">Celulares, laptops, accesorios y más, con ofertas reales y envío a todo Guatemala.</p>
+                <div class="hero-acciones">
+                    <a class="btn btn-hero" href="productos.php">Explorar catálogo <span aria-hidden="true">→</span></a>
+                    <a class="enlace-hero" href="productos.php?filtro=ofertas">Ver ofertas del mes</a>
+                </div>
+                <div class="hero-datos" aria-label="Beneficios de comprar en TechStore">
+                    <div><strong>+100</strong><span>productos disponibles</span></div>
+                    <div><strong>Pago seguro</strong><span>en cada compra</span></div>
+                </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="hero-resplandor"></div>
+                <div class="hero-producto hero-producto-secundario"><img src="assets/img/productos/airpods_pro2.png" alt=""></div>
+                <div class="hero-producto hero-producto-principal"><img src="assets/img/productos/iphone15.webp" alt=""></div>
+                <span class="hero-chip chip-envio">🚚 Envío nacional</span>
+                <span class="hero-chip chip-oferta">Ofertas semanales</span>
+            </div>
+        </section>
+
+        <section class="accesos-categorias" aria-label="Comprar por categoría">
+            <a href="productos.php?categoria=1"><span class="acceso-icono">📱</span><span>Celulares</span><small>Ver modelos</small></a>
+            <a href="productos.php?categoria=2"><span class="acceso-icono">💻</span><span>Laptops</span><small>Para estudiar y trabajar</small></a>
+            <a href="productos.php?categoria=3"><span class="acceso-icono">🎧</span><span>Audio</span><small>Escucha mejor</small></a>
+            <a href="productos.php?categoria=5"><span class="acceso-icono">⌚</span><span>Wearables</span><small>Siempre conectado</small></a>
+        </section>
 
         <div class="franja-promos">
             <div class="promo-item">
@@ -64,8 +89,12 @@
 
         <section class="seccion-productos seccion-ofertas">
             <div class="encabezado-seccion">
-                <h2>🔥 Ofertas del mes</h2>
-                <a class="ver-mas" href="productos.php?filtro=ofertas">Ver todos ›</a>
+                <div class="titulo-seccion">
+                    <p>Precios especiales</p>
+                    <h2>Ofertas que valen la pena</h2>
+                    <span>Encuentra tecnología a un mejor precio por tiempo limitado.</span>
+                </div>
+                <a class="ver-mas" href="productos.php?filtro=ofertas">Ver ofertas <span aria-hidden="true">→</span></a>
             </div>
             <div class="carrusel-destacados">
                 <div class="carrusel-pista" id="grid-ofertas">
@@ -78,8 +107,12 @@
 
         <section class="seccion-productos seccion-destacados">
             <div class="encabezado-seccion">
-                <h2>⭐ Productos destacados</h2>
-                <a class="ver-mas" href="productos.php?filtro=destacados">Ver todos ›</a>
+                <div class="titulo-seccion">
+                    <p>Elegidos para ti</p>
+                    <h2>Los favoritos de TechStore</h2>
+                    <span>Una selección de equipos que destacan por su calidad y rendimiento.</span>
+                </div>
+                <a class="ver-mas" href="productos.php?filtro=destacados">Ver selección <span aria-hidden="true">→</span></a>
             </div>
             <div class="grid-destacados-fijo" id="grid-destacados">
                 <p>Cargando productos...</p>
@@ -88,15 +121,16 @@
 
         <section class="seccion-productos seccion-nuevos">
             <div class="encabezado-seccion">
-                <h2>🆕 Ingreso nuevo</h2>
-                <a class="ver-mas" href="productos.php?filtro=nuevos">Ver todos ›</a>
+                <div class="titulo-seccion">
+                    <p>Lo más reciente</p>
+                    <h2>Recién llegados</h2>
+                    <span>Descubre los nuevos productos que ya están disponibles.</span>
+                </div>
+                <a class="ver-mas" href="productos.php?filtro=nuevos">Ver novedades <span aria-hidden="true">→</span></a>
             </div>
             <a href="productos.php?filtro=nuevos" class="banner-seccion">
                 <img src="assets/img/banner_nuevos.png" alt="Nuevos ingresos: los mejores celulares, laptops y más recién llegados a TechStore">
             </a>
-            <div class="lista-nuevos" id="grid-nuevos">
-                <p>Cargando productos...</p>
-            </div>
         </section>
 
         <div class="franja-confianza">
@@ -164,7 +198,7 @@
         <div class="footer-inferior">&copy; 2026 TechStore. Todos los derechos reservados.</div>
     </footer>
 
-    <script src="assets/js/cart-utils.js"></script>
-    <script src="assets/js/inicio.js"></script>
+    <script src="assets/js/cart-utils.js?v=<?php echo filemtime(__DIR__ . '/assets/js/cart-utils.js'); ?>"></script>
+    <script src="assets/js/inicio.js?v=<?php echo filemtime(__DIR__ . '/assets/js/inicio.js'); ?>"></script>
 </body>
 </html>

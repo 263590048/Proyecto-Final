@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiénes somos - TechStore</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
 </head>
 <body>
     <header>
@@ -108,7 +108,7 @@
         <div class="footer-inferior">&copy; 2026 TechStore. Todos los derechos reservados.</div>
     </footer>
 
-    <script src="assets/js/cart-utils.js"></script>
-    <script src="assets/js/nosotros.js"></script>
+    <script src="assets/js/cart-utils.js?v=<?php echo filemtime(__DIR__ . '/assets/js/cart-utils.js'); ?>"></script>
+    <script src="assets/js/nosotros.js?v=<?php echo filemtime(__DIR__ . '/assets/js/nosotros.js'); ?>"></script>
 </body>
 </html>

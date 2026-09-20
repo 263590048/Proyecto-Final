@@ -244,13 +244,13 @@ document.addEventListener('click', () => {
 
 // Menú desplegable de categorías en el header (compartido entre páginas)
 
-const ICONOS_MENU_CATEGORIAS = {
-    'Celulares': '📱',
-    'Laptops': '💻',
-    'Audífonos': '🎧',
-    'Tablets': '🔲',
-    'Smartwatches': '⌚',
-    'Accesorios': '🔌'
+const CLASES_MENU_CATEGORIAS = {
+    'Celulares': 'movil',
+    'Laptops': 'laptop',
+    'Audífonos': 'audio',
+    'Tablets': 'tablet',
+    'Smartwatches': 'reloj',
+    'Accesorios': 'accesorios'
 };
 
 async function cargarMenuCategorias() {
@@ -262,11 +262,21 @@ async function cargarMenuCategorias() {
         if (!respuesta.ok) throw new Error('La API respondió con error');
         const categorias = await respuesta.json();
 
-        panel.innerHTML = categorias.map(categoria => `
-            <a href="productos.php?categoria=${categoria.id_categoria}">
-                <span>${ICONOS_MENU_CATEGORIAS[categoria.nombre] || '🛒'}</span> ${categoria.nombre}
-            </a>
-        `).join('');
+        panel.innerHTML = `
+            <div class="panel-categorias-titulo">
+                <strong>Explora por categoría</strong>
+                <span>Encuentra justo lo que buscas</span>
+            </div>
+            <div class="panel-categorias-grid">
+                ${categorias.map(categoria => `
+                    <a href="productos.php?categoria=${categoria.id_categoria}" class="categoria-menu-item">
+                        <span class="menu-categoria-icono ${CLASES_MENU_CATEGORIAS[categoria.nombre] || 'general'}" aria-hidden="true"></span>
+                        <span><strong>${categoria.nombre}</strong><small>${categoria.descripcion || 'Ver productos'}</small></span>
+                    </a>
+                `).join('')}
+            </div>
+            <a href="productos.php" class="ver-catalogo-menu">Ver todo el catálogo <span aria-hidden="true">→</span></a>
+        `;
     } catch (error) {
         panel.innerHTML = '<p class="panel-categorias-error">No se pudieron cargar las categorías.</p>';
         console.error(error);
@@ -275,11 +285,14 @@ async function cargarMenuCategorias() {
 
 function toggleMenuCategorias(evento) {
     evento.stopPropagation();
-    document.getElementById('panel-categorias')?.classList.toggle('abierto');
+    const panel = document.getElementById('panel-categorias');
+    const estaAbierto = panel?.classList.toggle('abierto');
+    evento.currentTarget?.setAttribute('aria-expanded', String(Boolean(estaAbierto)));
 }
 
 document.addEventListener('click', () => {
     document.getElementById('panel-categorias')?.classList.remove('abierto');
+    document.querySelector('.btn-categorias')?.setAttribute('aria-expanded', 'false');
 });
 
 document.addEventListener('DOMContentLoaded', cargarMenuCategorias);

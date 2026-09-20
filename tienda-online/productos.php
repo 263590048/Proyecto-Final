@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo - TechStore</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
 </head>
 <body>
     <header>
@@ -41,12 +41,11 @@
         <div class="layout-catalogo">
             <aside class="filtros">
                 <h3>Filtros</h3>
-                <label>
-                    Categoría
-                    <select id="filtro-categoria">
-                        <option value="">Todas</option>
-                    </select>
-                </label>
+                <fieldset class="filtro-grupo-categorias">
+                    <legend>Categorías</legend>
+                    <p class="ayuda-filtro">Selecciona una o varias categorías.</p>
+                    <div class="lista-categorias-filtro" id="filtro-categoria"></div>
+                </fieldset>
                 <label>
                     Precio máximo
                     <input type="number" id="filtro-precio" placeholder="Ej. 3000" min="0">
@@ -98,7 +97,7 @@
         <div class="footer-inferior">&copy; 2026 TechStore. Todos los derechos reservados.</div>
     </footer>
 
-    <script src="assets/js/cart-utils.js"></script>
-    <script src="assets/js/productos.js"></script>
+    <script src="assets/js/cart-utils.js?v=<?php echo filemtime(__DIR__ . '/assets/js/cart-utils.js'); ?>"></script>
+    <script src="assets/js/productos.js?v=<?php echo filemtime(__DIR__ . '/assets/js/productos.js'); ?>"></script>
 </body>
 </html>

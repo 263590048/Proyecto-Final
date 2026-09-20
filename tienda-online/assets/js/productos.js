@@ -6,9 +6,9 @@ let TODOS_LOS_PRODUCTOS = [];
 // cada una limita el listado a lo que esa sección realmente muestra, en vez
 // de todo el catálogo (que solo se ve entrando por "Catálogo" o sin filtro).
 const FILTROS_SECCION = {
-    ofertas: { titulo: '🔥 Ofertas del mes' },
-    destacados: { titulo: '⭐ Productos destacados' },
-    nuevos: { titulo: '🆕 Ingreso nuevo' }
+    ofertas: { titulo: 'Ofertas que valen la pena' },
+    destacados: { titulo: 'Los favoritos de TechStore' },
+    nuevos: { titulo: 'Recién llegados' }
 };
 
 let FILTRO_SECCION_ACTUAL = null;
@@ -44,7 +44,14 @@ async function cargarProductos() {
 function aplicarFiltroSeccionDesdeUrl() {
     const params = new URLSearchParams(window.location.search);
     const filtro = params.get('filtro');
-    if (!filtro || !FILTROS_SECCION[filtro]) return;
+    const grupoCategorias = document.querySelector('.filtro-grupo-categorias');
+
+    if (!filtro || !FILTROS_SECCION[filtro]) {
+        if (grupoCategorias) grupoCategorias.hidden = false;
+        return;
+    }
+
+    if (grupoCategorias) grupoCategorias.hidden = true;
 
     FILTRO_SECCION_ACTUAL = filtro;
 
@@ -75,10 +82,8 @@ function preseleccionarCategoriaDesdeUrl() {
     const categoriaId = params.get('categoria');
     if (!categoriaId) return;
 
-    const select = document.getElementById('filtro-categoria');
-    if (select.querySelector(`option[value="${categoriaId}"]`)) {
-        select.value = categoriaId;
-    }
+    const opcion = document.querySelector(`#filtro-categoria input[value="${categoriaId}"]`);
+    if (opcion) opcion.checked = true;
 }
 
 function preseleccionarBusquedaDesdeUrl() {
@@ -90,15 +95,15 @@ function preseleccionarBusquedaDesdeUrl() {
 }
 
 function llenarSelectCategorias(categorias) {
-    const select = document.getElementById('filtro-categoria');
-    if (!select) return;
+    const contenedor = document.getElementById('filtro-categoria');
+    if (!contenedor) return;
 
-    categorias.forEach(categoria => {
-        const opcion = document.createElement('option');
-        opcion.value = categoria.id_categoria;
-        opcion.textContent = categoria.nombre;
-        select.appendChild(opcion);
-    });
+    contenedor.innerHTML = categorias.map(categoria => `
+        <label class="opcion-categoria-filtro">
+            <input type="checkbox" value="${categoria.id_categoria}">
+            <span>${categoria.nombre}</span>
+        </label>
+    `).join('');
 }
 
 function renderizarProductos(productos) {
@@ -131,13 +136,14 @@ function agregarYAvisar(idProducto) {
 
 function aplicarFiltros() {
     const texto = document.getElementById('buscador').value.trim().toLowerCase();
-    const categoriaId = document.getElementById('filtro-categoria').value;
+    const categoriasSeleccionadas = Array.from(document.querySelectorAll('#filtro-categoria input:checked'))
+        .map(opcion => String(opcion.value));
     const precioMax = document.getElementById('filtro-precio').value;
     const soloDisponibles = document.getElementById('filtro-disponible').checked;
 
     let resultado = TODOS_LOS_PRODUCTOS.filter(producto => {
         const coincideTexto = producto.nombre.toLowerCase().includes(texto);
-        const coincideCategoria = !categoriaId || String(producto.id_categoria) === categoriaId;
+        const coincideCategoria = categoriasSeleccionadas.length === 0 || categoriasSeleccionadas.includes(String(producto.id_categoria));
         const coincidePrecio = !precioMax || Number(producto.precio) <= Number(precioMax);
         const coincideDisponibilidad = !soloDisponibles || Number(producto.cantidad) > 0;
 
