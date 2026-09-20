@@ -65,7 +65,7 @@
         <section class="seccion-productos seccion-ofertas">
             <div class="encabezado-seccion">
                 <h2>🔥 Ofertas del mes</h2>
-                <a class="ver-mas" href="productos.php">Ver todos ›</a>
+                <a class="ver-mas" href="productos.php?filtro=ofertas">Ver todos ›</a>
             </div>
             <div class="carrusel-destacados">
                 <div class="carrusel-pista" id="grid-ofertas">
@@ -79,7 +79,7 @@
         <section class="seccion-productos seccion-destacados">
             <div class="encabezado-seccion">
                 <h2>⭐ Productos destacados</h2>
-                <a class="ver-mas" href="productos.php">Ver todos ›</a>
+                <a class="ver-mas" href="productos.php?filtro=destacados">Ver todos ›</a>
             </div>
             <div class="grid-destacados-fijo" id="grid-destacados">
                 <p>Cargando productos...</p>
@@ -89,8 +89,11 @@
         <section class="seccion-productos seccion-nuevos">
             <div class="encabezado-seccion">
                 <h2>🆕 Ingreso nuevo</h2>
-                <a class="ver-mas" href="productos.php">Ver todos ›</a>
+                <a class="ver-mas" href="productos.php?filtro=nuevos">Ver todos ›</a>
             </div>
+            <a href="productos.php?filtro=nuevos" class="banner-seccion">
+                <img src="assets/img/banner_nuevos.png" alt="Nuevos ingresos: los mejores celulares, laptops y más recién llegados a TechStore">
+            </a>
             <div class="lista-nuevos" id="grid-nuevos">
                 <p>Cargando productos...</p>
             </div>

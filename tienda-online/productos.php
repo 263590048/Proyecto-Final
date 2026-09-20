@@ -33,7 +33,8 @@
     </header>
 
     <main>
-        <h2 style="margin-bottom: 1rem; color: var(--azul-oscuro);">Catálogo de productos</h2>
+        <h2 id="titulo-catalogo" style="margin-bottom: 1rem; color: var(--azul-oscuro);">Catálogo de productos</h2>
+        <p id="filtro-activo-info" class="filtro-activo-info" style="display: none;"></p>
 
         <input type="search" id="buscador" class="buscador" placeholder="Buscar productos...">
 

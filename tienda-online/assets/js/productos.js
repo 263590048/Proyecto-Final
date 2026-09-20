@@ -2,6 +2,18 @@
 
 let TODOS_LOS_PRODUCTOS = [];
 
+// Secciones de la home ("Ver todos ›") que llegan al catálogo con ?filtro=... :
+// cada una limita el listado a lo que esa sección realmente muestra, en vez
+// de todo el catálogo (que solo se ve entrando por "Catálogo" o sin filtro).
+const FILTROS_SECCION = {
+    ofertas: { titulo: '🔥 Ofertas del mes' },
+    destacados: { titulo: '⭐ Productos destacados' },
+    nuevos: { titulo: '🆕 Ingreso nuevo' }
+};
+
+let FILTRO_SECCION_ACTUAL = null;
+let IDS_FILTRO_SECCION = null;
+
 async function cargarProductos() {
     const contenedor = document.getElementById('grid-productos');
 
@@ -21,11 +33,41 @@ async function cargarProductos() {
         llenarSelectCategorias(categorias);
         preseleccionarCategoriaDesdeUrl();
         preseleccionarBusquedaDesdeUrl();
+        aplicarFiltroSeccionDesdeUrl();
         aplicarFiltros();
     } catch (error) {
         contenedor.innerHTML = '<p>No se pudieron cargar los productos. Verifica que el servidor y la base de datos estén activos.</p>';
         console.error(error);
     }
+}
+
+function aplicarFiltroSeccionDesdeUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const filtro = params.get('filtro');
+    if (!filtro || !FILTROS_SECCION[filtro]) return;
+
+    FILTRO_SECCION_ACTUAL = filtro;
+
+    if (filtro === 'destacados') {
+        IDS_FILTRO_SECCION = new Set(seleccionarDestacadosPorCategoria(TODOS_LOS_PRODUCTOS, 2).map(p => p.id_producto));
+    } else if (filtro === 'nuevos') {
+        IDS_FILTRO_SECCION = new Set(seleccionarNuevos(TODOS_LOS_PRODUCTOS, 10).map(p => p.id_producto));
+    }
+
+    const titulo = document.getElementById('titulo-catalogo');
+    if (titulo) titulo.textContent = FILTROS_SECCION[filtro].titulo;
+
+    const aviso = document.getElementById('filtro-activo-info');
+    if (aviso) {
+        aviso.innerHTML = 'Mostrando solo esta sección. <a href="productos.php">Ver todo el catálogo ›</a>';
+        aviso.style.display = 'block';
+    }
+}
+
+function coincideFiltroSeccion(producto) {
+    if (!FILTRO_SECCION_ACTUAL) return true;
+    if (FILTRO_SECCION_ACTUAL === 'ofertas') return Boolean(producto.precio_oferta);
+    return IDS_FILTRO_SECCION.has(producto.id_producto);
 }
 
 function preseleccionarCategoriaDesdeUrl() {
@@ -99,7 +141,7 @@ function aplicarFiltros() {
         const coincidePrecio = !precioMax || Number(producto.precio) <= Number(precioMax);
         const coincideDisponibilidad = !soloDisponibles || Number(producto.cantidad) > 0;
 
-        return coincideTexto && coincideCategoria && coincidePrecio && coincideDisponibilidad;
+        return coincideTexto && coincideCategoria && coincidePrecio && coincideDisponibilidad && coincideFiltroSeccion(producto);
     });
 
     renderizarProductos(resultado);

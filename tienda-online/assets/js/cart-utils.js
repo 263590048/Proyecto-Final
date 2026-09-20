@@ -57,6 +57,26 @@ function renderizarTarjetaProductoHtml(producto) {
     `;
 }
 
+// Selección compartida entre inicio.js (secciones de la home) y productos.js
+// (catálogo filtrado desde "Ver todos ›" de cada sección)
+function seleccionarDestacadosPorCategoria(productos, cantidadPorCategoria) {
+    const porCategoria = {};
+
+    for (const producto of productos) {
+        const idCategoria = producto.id_categoria;
+        if (!porCategoria[idCategoria]) porCategoria[idCategoria] = [];
+        if (porCategoria[idCategoria].length < cantidadPorCategoria) {
+            porCategoria[idCategoria].push(producto);
+        }
+    }
+
+    return Object.values(porCategoria).flat();
+}
+
+function seleccionarNuevos(productos, cantidad) {
+    return [...productos].sort((a, b) => b.id_producto - a.id_producto).slice(0, cantidad);
+}
+
 function obtenerCarrito() {
     try {
         return JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];

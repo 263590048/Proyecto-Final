@@ -3,7 +3,7 @@
 :root {
     --azul-oscuro: #1a2a4a;
     --acento: #2f6fed;
-    --fondo: #f5f6fa;
+    --fondo: #e9eef8;
     --texto: #222;
     --texto-suave: #666;
     --borde: #e4e7ee;
@@ -21,7 +21,7 @@ html, body {
 }
 
 body {
-    background-color: var(--fondo);
+    background: linear-gradient(180deg, #d7e3f7 0%, var(--fondo) 100%);
     color: var(--texto);
     display: flex;
     flex-direction: column;
@@ -34,8 +34,9 @@ a {
 }
 
 header {
-    background-color: var(--azul-oscuro);
-    color: #fff;
+    background-color: #fff;
+    color: var(--texto);
+    border-bottom: 1px solid var(--borde);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -61,6 +62,7 @@ header .logo {
     display: flex;
     align-items: center;
     background: #fff;
+    border: 1px solid var(--borde);
     border-radius: 8px;
     overflow: hidden;
     flex-grow: 1;
@@ -109,12 +111,12 @@ header nav {
 }
 
 header nav a {
-    color: #cfd7e8;
+    color: var(--texto-suave);
     font-size: 0.9rem;
 }
 
 header nav a.activo {
-    color: #fff;
+    color: var(--azul-oscuro);
     font-weight: 600;
 }
 
@@ -133,8 +135,8 @@ header nav a.boton {
 }
 
 .btn-categorias {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--fondo);
+    color: var(--azul-oscuro);
     border: none;
     padding: 0.55rem 0.9rem;
     border-radius: 6px;
@@ -146,7 +148,7 @@ header nav a.boton {
 }
 
 .btn-categorias:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #e4e7ee;
 }
 
 .panel-categorias {
@@ -198,7 +200,7 @@ header nav a.boton {
 .btn-carrito-nav {
     background: none;
     border: none;
-    color: #cfd7e8;
+    color: var(--texto-suave);
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0;
@@ -206,7 +208,7 @@ header nav a.boton {
 }
 
 .btn-carrito-nav:hover {
-    color: #fff;
+    color: var(--acento);
 }
 
 .panel-carrito-mini {
@@ -358,8 +360,9 @@ main {
 }
 
 footer {
-    background: var(--azul-oscuro);
-    color: #cfd7e8;
+    background: #fff;
+    color: var(--texto-suave);
+    border-top: 1px solid var(--borde);
     text-align: center;
     padding: 1rem;
     font-size: 0.85rem;
@@ -391,19 +394,19 @@ footer {
 }
 
 .footer-col h4 {
-    color: #fff;
+    color: var(--azul-oscuro);
     font-size: 0.9rem;
     margin-bottom: 0.4rem;
 }
 
 .footer-col a,
 .footer-col p {
-    color: #cfd7e8;
+    color: var(--texto-suave);
     font-size: 0.85rem;
 }
 
 .footer-col a:hover {
-    color: #fff;
+    color: var(--acento);
 }
 
 .footer-col .logo-img {
@@ -421,7 +424,7 @@ footer {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--fondo);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -439,7 +442,7 @@ footer {
 }
 
 .footer-inferior {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid var(--borde);
     text-align: center;
     padding: 1rem;
     font-size: 0.8rem;
@@ -461,6 +464,17 @@ footer {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
     background: #fff;
+}
+
+.filtro-activo-info {
+    margin: -0.5rem 0 1rem;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+}
+
+.filtro-activo-info a {
+    color: var(--acento);
+    font-weight: 600;
 }
 
 .layout-catalogo {
@@ -836,15 +850,33 @@ footer {
 }
 
 .seccion-ofertas {
-    background: linear-gradient(135deg, #fff1f0, #ffe1df);
+    background: #ffd9d3;
 }
 
 .seccion-destacados {
-    background: linear-gradient(135deg, #eef2fb, #e3e9f8);
+    background: #d3e0f9;
 }
 
 .seccion-nuevos {
-    background: linear-gradient(135deg, #eafbf3, #dcf5e9);
+    background: #c5f1dc;
+}
+
+.banner-seccion {
+    display: block;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.banner-seccion:hover {
+    opacity: 0.92;
+}
+
+.banner-seccion img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 /* Productos destacados: grilla fija de 4, sin scroll */

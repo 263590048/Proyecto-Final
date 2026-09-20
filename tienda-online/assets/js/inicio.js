@@ -8,7 +8,7 @@ async function cargarSeccionesProductos() {
 
         renderizarCarrusel('grid-ofertas', productos.filter(producto => producto.precio_oferta));
         renderizarGrillaFija('grid-destacados', seleccionarDestacadosPorCategoria(productos, 2).slice(0, 4));
-        renderizarListaNuevos('grid-nuevos', [...productos].sort((a, b) => b.id_producto - a.id_producto).slice(0, 5));
+        renderizarListaNuevos('grid-nuevos', seleccionarNuevos(productos, 5));
     } catch (error) {
         ['grid-destacados', 'grid-ofertas', 'grid-nuevos'].forEach(id => {
             const contenedor = document.getElementById(id);
@@ -55,7 +55,6 @@ function renderizarListaNuevos(idContenedor, productos) {
         <div class="item-nuevo">
             <div class="imagen-producto">${imagenProductoHtml(producto)}</div>
             <div class="info-nuevo">
-                <span class="etiqueta-nuevo">NUEVO</span>
                 <h3>${producto.nombre}</h3>
                 ${renderizarPrecioHtml(producto)}
             </div>
@@ -64,20 +63,6 @@ function renderizarListaNuevos(idContenedor, productos) {
                 : `<p class="sin-stock">Sin stock</p>`}
         </div>
     `).join('');
-}
-
-function seleccionarDestacadosPorCategoria(productos, cantidadPorCategoria) {
-    const porCategoria = {};
-
-    for (const producto of productos) {
-        const idCategoria = producto.id_categoria;
-        if (!porCategoria[idCategoria]) porCategoria[idCategoria] = [];
-        if (porCategoria[idCategoria].length < cantidadPorCategoria) {
-            porCategoria[idCategoria].push(producto);
-        }
-    }
-
-    return Object.values(porCategoria).flat();
 }
 
 function moverCarruselOfertas(direccion) {

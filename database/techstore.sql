@@ -239,5 +239,7 @@ UPDATE productos SET imagen2 = 'base_refrigerante_2.jpeg' WHERE imagen = 'base_r
 UPDATE productos SET imagen2 = 'cable_usbc_lightning_2.webp' WHERE imagen = 'cable_usbc_lightning.jpg';
 UPDATE productos SET imagen2 = 'hub_usbc_2.png' WHERE imagen = 'hub_usbc.png';
 
+UPDATE productos SET imagen = 'funda_iphone15_2.jpg', imagen2 = 'funda_iphone15.jpg' WHERE nombre = 'Funda para iPhone 15';
+
 INSERT INTO usuarios (nombre, apellido, correo, password, telefono, direccion, tipo_usuario) VALUES
 ('Admin', 'Sistema', 'admin@techstore.com', '$2y$10$examplehashvalueaquiXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', '00000000', 'Oficina central', 'administrador');
