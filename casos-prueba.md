@@ -1,0 +1,67 @@
+# Casos y rutinas de prueba — TechStore
+
+Casos de prueba manuales, pensados para ejecutarse contra el entorno de desarrollo
+(`http://localhost/Tienda en Linea - Proyecto Final/tienda-online/`) durante la
+presentación del proyecto. La columna **Resultado obtenido** se completa al ejecutar cada
+caso.
+
+Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el navegador) el
+2026-09-21 y pasaron. El resto queda para ejecutarse en vivo durante la presentación.
+
+## Autenticación y cuentas (RF01, RF02, RF18)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP01 | Registro de cliente nuevo | En `registro.php`, llenar nombre, apellido, correo, contraseña (≥6 caracteres) y enviar | Se crea el usuario (`tipo_usuario = cliente`) y redirige a `login.php` | ✅ Verificado en navegador |
+| CP02 | Registro con correo duplicado | Repetir CP01 con el mismo correo | La API responde 400 con "Ya existe una cuenta con ese correo" y el formulario muestra el error | ✅ Verificado (curl) |
+| CP03 | Login con credenciales correctas | En `login.php`, ingresar el correo/contraseña de CP01 | Redirige a `index.php`; queda sesión activa (`$_SESSION['id_usuario']`) | ✅ Verificado en navegador |
+| CP04 | Login con contraseña incorrecta | Ingresar correo válido y contraseña errónea | La API responde 401 y se muestra "Correo o contraseña incorrectos" | ✅ Verificado (curl) |
+| CP05 | Acceso a `api/usuarios.php` sin sesión de administrador | Hacer `GET /api/usuarios.php` sin haber iniciado sesión como admin | Responde 403 "Acceso restringido a administradores" | ✅ Verificado (curl) |
+| CP06 | Administrar usuarios | Iniciar sesión como `admin@techstore.com`, ir a panel admin → pestaña Usuarios, editar el tipo de un usuario y eliminarlo | La tabla de usuarios se actualiza sin recargar la página | ✅ Verificado (curl + navegador) |
+| CP07 | Cerrar sesión | `DELETE /api/auth.php` (o el flujo de logout de la UI) | La sesión se destruye; una siguiente petición a `GET /api/auth.php` responde 401 | ✅ Verificado (curl) |
+
+## Catálogo y búsqueda (RF04–RF07)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP08 | Ver catálogo completo | Entrar a `productos.php` | Se listan los productos activos con imagen, nombre, categoría, precio y disponibilidad | |
+| CP09 | Buscar por nombre | Escribir "iphone" en el buscador del catálogo | Solo se muestran productos cuyo nombre contiene "iphone" | |
+| CP10 | Filtrar por categoría y rango de precio | Seleccionar categoría "Laptops" y un rango de precio | Solo se muestran laptops dentro del rango indicado | |
+| CP11 | Ver detalle de producto | Hacer clic en un producto del catálogo | Se muestra `producto.php` con descripción completa, galería (imagen/imagen2) y reseñas | |
+
+## Carrito y pedidos (RF08–RF13)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP12 | Agregar producto al carrito | Desde el catálogo o el detalle, click en "Agregar al carrito" | El producto aparece en `carrito.php` / popover del carrito con cantidad 1 | |
+| CP13 | Modificar cantidad en el carrito | En `carrito.php`, aumentar la cantidad de un producto | El subtotal y total se recalculan correctamente | |
+| CP14 | Eliminar producto del carrito | Quitar un producto del carrito | El producto desaparece y el total se actualiza | |
+| CP15 | Crear pedido con stock suficiente | `POST /api/pedidos.php` con `id_usuario` e `items` válidos | Responde 201 con `id_pedido`; el stock del producto se descuenta en `productos.cantidad` | ✅ Verificado (curl) |
+| CP16 | Crear pedido con stock insuficiente | Pedir una cantidad mayor a `productos.cantidad` disponible | Responde 400 "Stock insuficiente para el producto {id}"; no se crea el pedido ni se descuenta stock | ✅ Verificado (curl) |
+| CP17 | Consultar historial de pedidos | `GET /api/pedidos.php?id_usuario={id}` | Devuelve los pedidos de ese usuario ordenados por fecha descendente | ✅ Verificado (curl) |
+| CP18 | Actualizar estado de un pedido | `PUT /api/pedidos.php?id={id}` con `{"estado":"pagado"}` | El pedido cambia de estado; un estado inválido responde 400 | ✅ Verificado (curl) |
+
+## Reseñas y wishlist (RF14, RF15)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP19 | Reseñar un producto comprado | Con un usuario que ya tiene un pedido con ese producto, `POST /api/resenas.php` | Responde 201; la reseña aparece en el detalle del producto con el promedio recalculado | ✅ Verificado (curl) |
+| CP20 | Reseñar un producto no comprado | Repetir CP19 con un producto que el usuario nunca compró | Responde 400 "Solo puedes reseñar productos que hayas comprado" | ✅ Verificado (curl) |
+| CP21 | Agregar y quitar de la lista de deseos | `POST` y luego `DELETE` en `api/wishlist.php` para el mismo usuario/producto | El producto se agrega y luego se elimina correctamente de la wishlist | ✅ Verificado (curl) |
+
+## Panel de administración (RF16–RF18)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP22 | Crear producto | En admin → Productos → "Agregar producto", llenar el formulario y guardar | El producto aparece en la tabla y en el catálogo público | |
+| CP23 | Editar producto | Editar precio/stock de un producto existente | Los cambios se reflejan de inmediato en la tabla y en `producto.php` | |
+| CP24 | Eliminar producto | Eliminar un producto desde la tabla de admin | El producto deja de aparecer en el catálogo | |
+| CP25 | CRUD de categorías | En admin → Categorías, crear, editar y eliminar una categoría de prueba | Los cambios se reflejan en la tabla y en los filtros del catálogo | ✅ Verificado (curl) |
+
+## API (RF19)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP26 | Método no soportado | Hacer `PATCH /api/productos.php` (método no implementado) | Responde 405 "Método no permitido" | ✅ Verificado (curl) |
+| CP27 | Recurso inexistente | `GET /api/productos.php?id=99999` | Responde 404 "Producto no encontrado" | ✅ Verificado (curl) |
+| CP28 | Respuesta en JSON | Cualquier endpoint de `api/` | El header `Content-Type` es `application/json; charset=utf-8` y el cuerpo es JSON válido | ✅ Verificado (curl) |
