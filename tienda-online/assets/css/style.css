@@ -1509,6 +1509,10 @@ table.tabla-admin .acciones button {
     display: none;
 }
 
+.seccion-admin.oculto {
+    display: none;
+}
+
 .modal-fondo form.formulario {
     max-width: 460px;
     width: 90%;

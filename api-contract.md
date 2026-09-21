@@ -19,12 +19,18 @@ Base URL en desarrollo (dentro de XAMPP htdocs): `http://localhost/Tienda en Lin
 | GET | `/api/wishlist.php?id_usuario={id}` | Listar lista de deseos del usuario | ✅ Implementado — RF15 |
 | POST | `/api/wishlist.php` | Agregar producto a la lista de deseos (`{id_usuario, id_producto}`) | ✅ Implementado — RF15 |
 | DELETE | `/api/wishlist.php?id_usuario={id}&id_producto={id}` | Quitar producto de la lista de deseos | ✅ Implementado — RF15 |
-| POST | `/api/auth.php` | Iniciar sesión (correo + password) | ⏳ Pendiente (backend) — RF02. El frontend ya envía `{correo, password}` y espera 200/401 |
-| POST | `/api/usuarios.php` | Registrar usuario | ⏳ Pendiente (backend) — RF01. El frontend ya envía `{nombre, apellido, correo, password, telefono, direccion}` |
-| GET/POST/PUT/DELETE | `/api/categorias.php` | CRUD de categorías | ⏳ Pendiente (backend) — RF17, hoy solo tiene GET |
-| GET/POST/PUT/DELETE | `/api/usuarios.php` | CRUD de usuarios (admin) | ⏳ Pendiente (backend) — RF18 |
+| POST | `/api/auth.php` | Iniciar sesión (correo + password), inicia sesión PHP | ✅ Implementado — RF02 |
+| GET | `/api/auth.php` | Consultar el usuario de la sesión activa | ✅ Implementado — RF02 |
+| DELETE | `/api/auth.php` | Cerrar sesión | ✅ Implementado — RF02 |
+| POST | `/api/usuarios.php` | Registrar usuario (público) | ✅ Implementado — RF01 |
+| GET | `/api/usuarios.php` | Listar/consultar usuarios (solo administradores) | ✅ Implementado — RF18 |
+| PUT | `/api/usuarios.php?id={id}` | Actualizar usuario (solo administradores) | ✅ Implementado — RF18 |
+| DELETE | `/api/usuarios.php?id={id}` | Eliminar usuario (solo administradores) | ✅ Implementado — RF18 |
+| POST | `/api/categorias.php` | Crear categoría | ✅ Implementado — RF17 |
+| PUT | `/api/categorias.php?id={id}` | Actualizar categoría | ✅ Implementado — RF17 |
+| DELETE | `/api/categorias.php?id={id}` | Eliminar categoría | ✅ Implementado — RF17 |
 
-Nota: como `auth.php`/sesiones (RF02) todavía no existen, `pedidos`, `resenas` y `wishlist` reciben `id_usuario` directamente en el cuerpo/query en vez de tomarlo de una sesión. Cuando se implemente el login, conviene reemplazar esos parámetros por `$_SESSION['id_usuario']`.
+Nota: `pedidos`, `resenas` y `wishlist` siguen recibiendo `id_usuario` directamente en el cuerpo/query en vez de tomarlo de `$_SESSION['id_usuario']`. Ahora que el login existe, conviene migrarlos a la sesión (pendiente, no incluido en este cambio para no tocar flujos de carrito/checkout ya probados).
 
 ## Ejemplo de respuesta — GET /api/productos.php
 
@@ -51,6 +57,10 @@ Nota: como `auth.php`/sesiones (RF02) todavía no existen, `pedidos`, `resenas` 
 
 ## Frontend — completo
 
-Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de producto, carrito) y el panel de administración de productos ya están implementados en HTML/CSS/JS y consumen la API de arriba. El carrito usa `localStorage` mientras no exista sesión de backend; al finalizar compra, el botón queda listo para conectarse a `POST /api/pedidos.php` en cuanto ese endpoint exista (ver `assets/js/carrito.js`).
+Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de producto, carrito) y el panel de administración (productos, categorías y usuarios) ya están implementados en HTML/CSS/JS y consumen la API de arriba. El carrito usa `localStorage` mientras el checkout no esté conectado a `POST /api/pedidos.php` (ver `assets/js/carrito.js`).
 
-Lo que falta es 100% backend (PHP/MySQL): completar `model/Usuario.php` y los endpoints marcados como pendientes arriba (auth, registro y CRUD de usuarios/categorías). `model/Pedido.php`, `model/Resena.php` y `model/Wishlist.php` con sus controladores y endpoints ya están implementados.
+## Pendiente
+
+- Conectar el botón de checkout del carrito a `POST /api/pedidos.php` usando `$_SESSION['id_usuario']` en vez de pedirlo al cliente.
+- Migrar `pedidos`, `resenas` y `wishlist` para tomar `id_usuario` de la sesión en vez de recibirlo en la petición.
+- RF03: recuperación de contraseña (no implementada).
