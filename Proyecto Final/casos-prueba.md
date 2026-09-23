@@ -22,6 +22,8 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | CP06 | Administrar usuarios | Iniciar sesión como `admin@techstore.com`, ir a panel admin → pestaña Usuarios, editar el tipo de un usuario y eliminarlo | La tabla de usuarios se actualiza sin recargar la página | ✅ Verificado (curl + navegador) |
 | CP06b | Crear usuario desde el panel | Como administrador, en admin → Usuarios → "+ Agregar usuario", llenar nombre, apellido, correo, contraseña y tipo "Administrador" | El usuario aparece en la tabla con el tipo elegido y puede iniciar sesión | ✅ Verificado (curl + navegador) 2026-09-22 |
 | CP06c | Registro público no puede crear administradores | `POST /api/usuarios.php` sin sesión y con `"tipo_usuario":"administrador"` | Responde 201 pero la cuenta se crea como `cliente` | ✅ Verificado (curl) 2026-09-22 |
+| CP06d | Panel admin protegido | Abrir `admin.php` sin sesión y luego con una sesión de cliente | En ambos casos redirige a `login.php` (302); con sesión de administrador se muestra el panel | ✅ Verificado (curl) 2026-09-22 |
+| CP06e | XSS en datos de usuarios | Registrar un cliente con nombre `Eve'><img src=x onerror=...>`, comprar, dejar una reseña y una dirección de envío con `<img src=x onerror=...>`; abrir el detalle del producto, `resenas.php`, admin (Usuarios, Pedidos, Reseñas, botón Editar) y `confirmacion.php` | El código se muestra como texto y no se ejecuta en ninguna página | ✅ Verificado en navegador 2026-09-22 |
 | CP07 | Cerrar sesión | `DELETE /api/auth.php` (o el flujo de logout de la UI) | La sesión se destruye; una siguiente petición a `GET /api/auth.php` responde 401 | ✅ Verificado (curl) |
 
 ## Catálogo y búsqueda (RF04–RF07)

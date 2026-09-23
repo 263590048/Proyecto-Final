@@ -18,6 +18,14 @@ function renderizarPrecioHtml(producto) {
     return `<p class="precio">Q${Number(producto.precio).toFixed(2)}</p>`;
 }
 
+// Texto escrito por usuarios (nombres, comentarios, direcciones): se escapa antes de
+// insertarlo con innerHTML o en un atributo, para evitar XSS
+function escaparHtml(texto) {
+    return String(texto ?? '').replace(/[&<>"']/g, caracter => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[caracter]);
+}
+
 // Imagen del producto: usa el archivo real si existe, o el ícono de respaldo si falta o no carga
 const CARPETA_IMAGENES_PRODUCTOS = 'assets/img/productos/';
 

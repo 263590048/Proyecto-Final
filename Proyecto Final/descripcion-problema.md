@@ -78,7 +78,10 @@ panel de administración y detalle de producto — ya implementadas en el proyec
 **Nota sobre el modelo de datos:** el proyecto usa una única base de datos **relacional**
 (MySQL). No se usa una base NoSQL porque los datos (usuarios, productos, pedidos, reseñas)
 tienen relaciones fijas y consultas que se benefician de llaves foráneas e integridad
-referencial (por ejemplo, no permitir un pedido de un producto que no existe).
+referencial (por ejemplo, no permitir un pedido de un producto que no existe). El diseño
+equivalente en una base **NoSQL (MongoDB)** —colecciones, documentos de ejemplo, índices y la
+comparación con el modelo relacional— está en
+[`database/modelo-nosql.md`](../database/modelo-nosql.md).
 
 ## Estructura básica del proyecto (MVC)
 

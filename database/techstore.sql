@@ -310,3 +310,52 @@ INSERT INTO wishlist (id_usuario, id_producto) VALUES
 (3, 61),
 (4, 63),
 (5, 64);
+
+-- Clientes de demo que compraron con el flujo de pago (RF13) y dejaron reseñas.
+-- Contraseña de todos: demo1234 (hash bcrypt). Quedan con id 7-11 en una importación nueva.
+INSERT INTO usuarios (id_usuario, nombre, apellido, correo, password, telefono, direccion, tipo_usuario) VALUES
+(7, 'Sofía', 'Ramírez', 'sofia.ramirez@correo.com', '$2y$10$0SshLKTskLrk67/7oHDx1OQUVZOTLWIMu1gmlJjfW5XzKwlLUen7e', '55557001', 'Zona 14, Ciudad de Guatemala', 'cliente'),
+(8, 'Diego', 'Castillo', 'diego.castillo@correo.com', '$2y$10$Ix0HTJXyoLdfK/JFQ/rnwuAwqyo3CTkzJYmRFXY9pnud6fc1MMKBa', '55557002', 'Mixco, Guatemala', 'cliente'),
+(9, 'Valeria', 'Morales', 'valeria.morales@correo.com', '$2y$10$ESalPHyQ1X6I.kQs/AnJkeoLcQ4EjOQ4U5pmPMhTw7Tt3Sn6yI72q', '55557003', 'Antigua Guatemala, Sacatepéquez', 'cliente'),
+(10, 'Andrés', 'Herrera', 'andres.herrera@correo.com', '$2y$10$0B4y6fOMF31aYbWkbFXJDuNCu2y46HVUOZzqKgoOaAliIQhV6.R.2', '55557004', 'Quetzaltenango', 'cliente'),
+(11, 'Gabriela', 'Rodas', 'gabriela.rodas@correo.com', '$2y$10$tbM7P79bnI3VuNKQqgE81OGP2Z7zpESDQg/lVH2XudYejLGwOJRI.', '55557005', 'Zona 10, Ciudad de Guatemala', 'cliente');
+
+-- Pedidos de los clientes de demo (tarjeta, transferencia y contra entrega), ya entregados
+INSERT INTO pedidos (id_pedido, id_usuario, fecha, total, estado, metodo_pago, referencia_pago, direccion_envio, telefono_contacto) VALUES
+(6, 7, '2026-09-14 10:12:00', 1798.00, 'entregado', 'tarjeta', 'Tarjeta •••• 4242', 'Zona 14, Ciudad de Guatemala', '55557001'),
+(7, 7, '2026-09-15 18:40:00', 399.00, 'entregado', 'contra_entrega', NULL, 'Zona 14, Ciudad de Guatemala', '55557001'),
+(8, 8, '2026-09-15 09:05:00', 9698.00, 'entregado', 'tarjeta', 'Tarjeta •••• 4242', 'Mixco, Guatemala', '55557002'),
+(9, 9, '2026-09-16 13:22:00', 5999.00, 'entregado', 'transferencia', NULL, 'Antigua Guatemala, Sacatepéquez', '55557003'),
+(10, 9, '2026-09-17 20:10:00', 4457.00, 'entregado', 'tarjeta', 'Tarjeta •••• 4242', 'Antigua Guatemala, Sacatepéquez', '55557003'),
+(11, 10, '2026-09-18 11:30:00', 2048.00, 'entregado', 'tarjeta', 'Tarjeta •••• 4242', 'Quetzaltenango', '55557004'),
+(12, 11, '2026-09-18 16:45:00', 9999.00, 'entregado', 'contra_entrega', NULL, 'Zona 10, Ciudad de Guatemala', '55557005'),
+(13, 11, '2026-09-19 08:55:00', 249.00, 'entregado', 'tarjeta', 'Tarjeta •••• 4242', 'Zona 10, Ciudad de Guatemala', '55557005');
+
+INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio) VALUES
+(6, 26, 1, 1699.00),
+(6, 55, 1, 99.00),
+(7, 45, 1, 399.00),
+(8, 23, 1, 9499.00),
+(8, 58, 1, 199.00),
+(9, 35, 1, 5999.00),
+(10, 49, 1, 4299.00),
+(10, 59, 2, 79.00),
+(11, 11, 1, 1899.00),
+(11, 53, 1, 149.00),
+(12, 17, 1, 9999.00),
+(13, 28, 1, 249.00);
+
+-- Reseñas de los clientes de demo (cada una de un producto que compraron)
+INSERT INTO resenas (id_usuario, id_producto, calificacion, comentario, fecha) VALUES
+(7, 26, 5, 'La cancelación de ruido es impresionante, los uso todos los días en el bus. Valen cada quetzal.', '2026-09-18 10:12:00'),
+(7, 45, 4, 'Buena batería y muy liviano. La app podría ser más intuitiva.', '2026-09-18 18:40:00'),
+(8, 23, 5, 'Corre todos mis juegos en ultra sin problema. Se calienta un poco, pero con la base refrigerante perfecto.', '2026-09-19 09:05:00'),
+(7, 55, 3, 'Cumple, pero el material se siente un poco delgado. Por el precio está bien.', '2026-09-19 10:12:00'),
+(9, 35, 5, 'Perfecta para la universidad, la pantalla se ve increíble y la batería dura todo el día.', '2026-09-19 13:22:00'),
+(8, 58, 4, 'Baja bastante la temperatura de la laptop. Los ventiladores hacen algo de ruido.', '2026-09-20 09:05:00'),
+(10, 11, 4, 'Excelente relación calidad-precio. La cámara de noche no es la mejor, pero para el día está muy bien.', '2026-09-21 11:30:00'),
+(11, 17, 5, 'Silenciosa, rápida y la batería es de otro mundo. El envío llegó en dos días.', '2026-09-21 19:40:00'),
+(9, 49, 4, 'Muy completo, pero la batería no llega a los dos días. El diseño es precioso.', '2026-09-21 20:10:00'),
+(11, 28, 3, 'Suenan bien para el precio, pero el estuche se abre muy fácil en la bolsa.', '2026-09-22 08:55:00'),
+(10, 53, 5, 'Carga rapidísimo y es muy compacto. Ya compré otro para la oficina.', '2026-09-22 11:30:00'),
+(9, 59, 2, 'Uno de los dos cables dejó de cargar a las dos semanas. El otro funciona bien.', '2026-09-22 20:10:00');

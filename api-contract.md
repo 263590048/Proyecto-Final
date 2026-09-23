@@ -74,6 +74,8 @@ Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de
 - `resenas.php` (RF14) muestra todas las reseñas de la tienda con el promedio general y la distribución por estrellas; se pueden buscar por producto o comentario, filtrar por categoría y calificación, y ordenar (`assets/js/resenas.js`). Está enlazada en el menú de todas las páginas.
 - `lista-deseos.php` (RF15) muestra los productos guardados, con opción de agregarlos al carrito o quitarlos (`assets/js/lista-deseos.js`).
 
+- `admin.php` redirige a `login.php` si la sesión no es de administrador (además de que cada endpoint de la API valida el rol por su cuenta). El header muestra el nombre del admin y un botón "Cerrar sesión".
+- Todo texto escrito por usuarios (nombres, correos, comentarios, direcciones) se escapa con `escaparHtml()` (`cart-utils.js`) / `escaparHtmlAdmin()` (`admin.js`) antes de insertarse en el HTML, para evitar XSS.
 - `admin.php` (pestaña Pedidos) lista todos los pedidos con los datos del cliente y permite cambiar su estado (RF13).
 - `admin.php` (pestaña Reseñas) lista todas las reseñas con producto, cliente, calificación y comentario; se pueden filtrar por estrellas y eliminar las inapropiadas.
 

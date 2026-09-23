@@ -2,12 +2,7 @@
 
 let todasLasResenas = [];
 
-// El comentario lo escribe el cliente: se escapa antes de insertarlo en el HTML
-function escaparHtml(texto) {
-    const div = document.createElement('div');
-    div.textContent = texto ?? '';
-    return div.innerHTML;
-}
+// escaparHtml() viene de cart-utils.js
 
 function estrellasHtml(calificacion) {
     return '⭐️'.repeat(calificacion) + '☆'.repeat(5 - calificacion);

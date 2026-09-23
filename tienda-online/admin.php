@@ -1,3 +1,11 @@
+<?php
+// El panel solo se muestra a administradores; la API también valida cada operación por su cuenta
+session_start();
+if (($_SESSION['tipo_usuario'] ?? null) !== 'administrador') {
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

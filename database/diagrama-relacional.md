@@ -108,9 +108,11 @@ erDiagram
 
 ## Modelo NoSQL
 
-El proyecto usa una única base de datos relacional (MySQL); no se implementó un modelo
-NoSQL porque no hay datos con estructura variable o de alto volumen no relacional que lo
-justifiquen — todas las entidades (usuarios, productos, pedidos, reseñas) tienen relaciones
+El diseño equivalente en MongoDB (colecciones, qué se embebe y qué se referencia, documentos
+de ejemplo, índices y consultas) está en [modelo-nosql.md](modelo-nosql.md).
+
+La aplicación usa una única base de datos relacional (MySQL) porque no hay datos con
+estructura variable o de alto volumen no relacional que justifiquen NoSQL — todas las entidades (usuarios, productos, pedidos, reseñas) tienen relaciones
 fijas y se benefician de integridad referencial y transacciones (por ejemplo, al crear un
 pedido se descuenta stock y se inserta el detalle dentro de una misma transacción, ver
 `Pedido::crear()` en `tienda-online/model/Pedido.php`).

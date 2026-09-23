@@ -175,10 +175,10 @@ function renderizarResenas(idProducto, resenas, resumen, puedeResenar) {
     const listaHtml = resenas.map(resena => `
         <div class="resena">
             <div class="resena-cabecera">
-                <strong>${resena.nombre} ${resena.apellido}</strong>
+                <strong>${escaparHtml(resena.nombre)} ${escaparHtml(resena.apellido)}</strong>
                 <span class="resena-estrellas">${'⭐️'.repeat(resena.calificacion)}${'☆'.repeat(5 - resena.calificacion)}</span>
             </div>
-            ${resena.comentario ? `<p>${resena.comentario}</p>` : ''}
+            ${resena.comentario ? `<p>${escaparHtml(resena.comentario)}</p>` : ''}
         </div>
     `).join('');
 

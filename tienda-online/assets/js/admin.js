@@ -289,6 +289,9 @@ document.getElementById('form-categoria').addEventListener('submit', async (even
 
 // Administración de usuarios (RF18), consumiendo api/usuarios.php
 
+// Se guarda la lista para que "Editar" busque al usuario por id, sin incrustar su JSON en el onclick
+let usuariosAdmin = [];
+
 async function cargarTablaUsuarios() {
     const cuerpo = document.getElementById('cuerpo-tabla-usuarios');
 
@@ -299,6 +302,7 @@ async function cargarTablaUsuarios() {
             return;
         }
         const usuarios = await respuesta.json();
+        usuariosAdmin = usuarios;
 
         if (usuarios.length === 0) {
             cuerpo.innerHTML = '<tr><td colspan="6">No hay usuarios registrados.</td></tr>';
@@ -308,12 +312,12 @@ async function cargarTablaUsuarios() {
         cuerpo.innerHTML = usuarios.map(usuario => `
             <tr>
                 <td>${usuario.id_usuario}</td>
-                <td>${usuario.nombre} ${usuario.apellido}</td>
-                <td>${usuario.correo}</td>
+                <td>${escaparHtmlAdmin(usuario.nombre)} ${escaparHtmlAdmin(usuario.apellido)}</td>
+                <td>${escaparHtmlAdmin(usuario.correo)}</td>
                 <td>${usuario.tipo_usuario}</td>
                 <td>${usuario.creado_en ?? ''}</td>
                 <td class="acciones">
-                    <button class="btn-secundario" onclick='abrirModalUsuario(${JSON.stringify(usuario)})'>Editar</button>
+                    <button class="btn-secundario" onclick="abrirModalUsuario(usuariosAdmin.find(u => u.id_usuario === ${usuario.id_usuario}))">Editar</button>
                     <button class="btn-peligro" onclick="eliminarUsuario(${usuario.id_usuario})">Eliminar</button>
                 </td>
             </tr>
@@ -393,7 +397,7 @@ async function cargarTablaPedidos() {
         cuerpo.innerHTML = pedidos.map(pedido => `
             <tr>
                 <td>${pedido.id_pedido}</td>
-                <td>${pedido.nombre} ${pedido.apellido}<br><small>${pedido.correo}</small></td>
+                <td>${escaparHtmlAdmin(pedido.nombre)} ${escaparHtmlAdmin(pedido.apellido)}<br><small>${escaparHtmlAdmin(pedido.correo)}</small></td>
                 <td>${pedido.fecha}</td>
                 <td>Q${Number(pedido.total).toFixed(2)}</td>
                 <td>
@@ -473,11 +477,11 @@ document.getElementById('form-usuario').addEventListener('submit', async (evento
 
 let resenasAdmin = [];
 
-// El comentario lo escribe el cliente: se escapa antes de insertarlo en el HTML
+// Texto escrito por clientes (nombres, correos, comentarios): se escapa antes de insertarlo en el HTML
 function escaparHtmlAdmin(texto) {
-    const div = document.createElement('div');
-    div.textContent = texto ?? '';
-    return div.innerHTML;
+    return String(texto ?? '').replace(/[&<>"']/g, caracter => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[caracter]);
 }
 
 async function cargarTablaResenas() {

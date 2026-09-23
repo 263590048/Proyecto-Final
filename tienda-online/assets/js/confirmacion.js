@@ -56,8 +56,8 @@ async function cargarConfirmacion() {
             <div class="confirmacion-datos">
                 <div><span>Estado</span><span class="badge-estado">${pedido.estado}</span></div>
                 <div><span>Método de pago</span><strong>${metodo}${pedido.referencia_pago ? ` (${pedido.referencia_pago})` : ''}</strong></div>
-                <div><span>Dirección de envío</span><strong>${pedido.direccion_envio || '—'}</strong></div>
-                <div><span>Teléfono de contacto</span><strong>${pedido.telefono_contacto || '—'}</strong></div>
+                <div><span>Dirección de envío</span><strong>${escaparHtml(pedido.direccion_envio) || '—'}</strong></div>
+                <div><span>Teléfono de contacto</span><strong>${escaparHtml(pedido.telefono_contacto) || '—'}</strong></div>
             </div>
 
             <h3>Productos</h3>
