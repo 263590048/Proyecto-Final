@@ -20,6 +20,7 @@
             <a href="#" id="nav-categorias" onclick="mostrarSeccion('categorias'); return false;">🏷️ Categorías</a>
             <a href="#" id="nav-usuarios" onclick="mostrarSeccion('usuarios'); return false;">👤 Usuarios</a>
             <a href="#" id="nav-pedidos" onclick="mostrarSeccion('pedidos'); return false;">🧾 Pedidos</a>
+            <a href="#" id="nav-resenas" onclick="mostrarSeccion('resenas'); return false;">⭐ Reseñas</a>
         </aside>
 
         <div class="admin-contenido seccion-admin" id="seccion-productos">
@@ -108,6 +109,38 @@
                 </thead>
                 <tbody id="cuerpo-tabla-pedidos">
                     <tr><td colspan="6">Cargando pedidos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-contenido seccion-admin oculto" id="seccion-resenas">
+            <div class="admin-header">
+                <h2>Gestión de reseñas</h2>
+                <select id="filtro-admin-resenas" aria-label="Filtrar por calificación" onchange="renderizarTablaResenas()">
+                    <option value="">Todas las calificaciones</option>
+                    <option value="5">5 estrellas</option>
+                    <option value="4">4 estrellas</option>
+                    <option value="3">3 estrellas</option>
+                    <option value="2">2 estrellas</option>
+                    <option value="1">1 estrella</option>
+                </select>
+            </div>
+            <p class="resumen-admin-resenas" id="resumen-admin-resenas"></p>
+
+            <table class="tabla-admin">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Cliente</th>
+                        <th>Calificación</th>
+                        <th>Comentario</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla-resenas">
+                    <tr><td colspan="7">Cargando reseñas...</td></tr>
                 </tbody>
             </table>
         </div>

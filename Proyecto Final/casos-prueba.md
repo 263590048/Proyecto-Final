@@ -72,6 +72,7 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | CP22 | Crear producto | En admin → Productos → "Agregar producto", llenar el formulario y guardar | El producto aparece en la tabla y en el catálogo público | |
 | CP23 | Editar producto | Editar precio/stock de un producto existente | Los cambios se reflejan de inmediato en la tabla y en `producto.php` | |
 | CP24 | Eliminar producto | Eliminar un producto desde la tabla de admin | El producto deja de aparecer en el catálogo | |
+| CP24b | Moderar reseñas | En admin → Reseñas, filtrar por "1 estrella" y eliminar una reseña | La reseña desaparece de la tabla, de `resenas.php` y del detalle del producto; el resumen se recalcula. Sin sesión de admin, `DELETE /api/resenas.php?id={id}` responde 403 | ✅ Verificado (curl + navegador) 2026-09-22 |
 | CP25 | CRUD de categorías | En admin → Categorías, crear, editar y eliminar una categoría de prueba | Los cambios se reflejan en la tabla y en los filtros del catálogo | ✅ Verificado (curl) |
 
 ## API (RF19)

@@ -108,6 +108,14 @@ class Resena
         ];
     }
 
+    // Moderación desde el panel de administración
+    public function eliminar(int $idResena): bool
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM resenas WHERE id_resena = :id');
+        $stmt->execute(['id' => $idResena]);
+        return $stmt->rowCount() > 0;
+    }
+
     public function obtenerResumen(int $idProducto): array
     {
         $stmt = $this->pdo->prepare(

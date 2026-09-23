@@ -102,12 +102,13 @@ document.getElementById('form-producto').addEventListener('submit', async (event
 
 document.addEventListener('DOMContentLoaded', cargarTablaProductos);
 
-// Navegación entre secciones del panel (Productos / Categorías / Usuarios)
+// Navegación entre secciones del panel (Productos / Categorías / Usuarios / Pedidos / Reseñas)
 
 const cargasPorSeccion = {
     categorias: () => cargarTablaCategorias(),
     usuarios: () => cargarTablaUsuarios(),
     pedidos: () => cargarTablaPedidos(),
+    resenas: () => cargarTablaResenas(),
 };
 const seccionesCargadas = new Set(['productos']);
 
@@ -405,3 +406,75 @@ document.getElementById('form-usuario').addEventListener('submit', async (evento
         console.error(error);
     }
 });
+
+// Moderación de reseñas (RF14), consumiendo api/resenas.php
+
+let resenasAdmin = [];
+
+// El comentario lo escribe el cliente: se escapa antes de insertarlo en el HTML
+function escaparHtmlAdmin(texto) {
+    const div = document.createElement('div');
+    div.textContent = texto ?? '';
+    return div.innerHTML;
+}
+
+async function cargarTablaResenas() {
+    const cuerpo = document.getElementById('cuerpo-tabla-resenas');
+
+    try {
+        const respuesta = await fetch('api/resenas.php');
+        if (!respuesta.ok) throw new Error('La API respondió con error');
+        const datos = await respuesta.json();
+
+        resenasAdmin = datos.resenas;
+        const { total, promedio } = datos.resumen;
+        document.getElementById('resumen-admin-resenas').textContent =
+            total > 0 ? `${total} reseñas · promedio ${promedio.toFixed(1)} ★` : '';
+
+        renderizarTablaResenas();
+    } catch (error) {
+        cuerpo.innerHTML = '<tr><td colspan="7">No se pudieron cargar las reseñas.</td></tr>';
+        console.error(error);
+    }
+}
+
+function renderizarTablaResenas() {
+    const cuerpo = document.getElementById('cuerpo-tabla-resenas');
+    const calificacion = Number(document.getElementById('filtro-admin-resenas').value);
+    const resenas = resenasAdmin.filter(resena => !calificacion || resena.calificacion === calificacion);
+
+    if (resenas.length === 0) {
+        cuerpo.innerHTML = '<tr><td colspan="7">No hay reseñas registradas.</td></tr>';
+        return;
+    }
+
+    cuerpo.innerHTML = resenas.map(resena => `
+        <tr>
+            <td>${resena.id_resena}</td>
+            <td><a href="producto.php?id=${resena.id_producto}" target="_blank" style="color: var(--acento);">${escaparHtmlAdmin(resena.producto)}</a></td>
+            <td>${escaparHtmlAdmin(resena.nombre)} ${escaparHtmlAdmin(resena.apellido)}</td>
+            <td class="celda-estrellas">${'★'.repeat(resena.calificacion)}${'☆'.repeat(5 - resena.calificacion)}</td>
+            <td class="celda-comentario">${escaparHtmlAdmin(resena.comentario) || '—'}</td>
+            <td style="white-space: nowrap;">${resena.fecha.slice(0, 10)}</td>
+            <td class="acciones">
+                <button class="btn-peligro" onclick="eliminarResena(${resena.id_resena})">Eliminar</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+async function eliminarResena(id) {
+    if (!confirm('¿Eliminar esta reseña? Dejará de mostrarse en la tienda.')) return;
+
+    try {
+        const respuesta = await fetch(`api/resenas.php?id=${id}`, { method: 'DELETE' });
+        if (!respuesta.ok) {
+            alert('No se pudo eliminar la reseña.');
+            return;
+        }
+        cargarTablaResenas();
+    } catch (error) {
+        alert('No se pudo eliminar la reseña.');
+        console.error(error);
+    }
+}

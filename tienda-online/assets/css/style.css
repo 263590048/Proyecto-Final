@@ -2290,3 +2290,30 @@ a.boton-enlace.btn-secundario {
         grid-column: 1 / -1;
     }
 }
+
+/* Panel de administración: moderación de reseñas */
+
+#filtro-admin-resenas {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: #fff;
+}
+
+.resumen-admin-resenas {
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+    margin: -0.8rem 0 1rem;
+}
+
+table.tabla-admin .celda-estrellas {
+    color: #f5a623;
+    white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+table.tabla-admin .celda-comentario {
+    max-width: 340px;
+    color: var(--texto-suave);
+}

@@ -31,6 +31,11 @@ class ResenaController
         ];
     }
 
+    public function eliminar(int $idResena): bool
+    {
+        return $this->modelo->eliminar($idResena);
+    }
+
     // Para que el frontend sepa si debe mostrar el formulario de reseña
     public function puedeResenar(int $idUsuario, int $idProducto): bool
     {

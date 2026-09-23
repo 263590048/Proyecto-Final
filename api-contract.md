@@ -16,6 +16,7 @@ Base URL en desarrollo (dentro de XAMPP htdocs): `http://localhost/Tienda en Lin
 | GET | `/api/pedidos.php?id={id}` | Detalle de un pedido con sus productos (solo el dueño o un admin) | ✅ Implementado — RF12 |
 | PUT | `/api/pedidos.php?id={id}` | Actualizar estado del pedido (`{estado}`); solo administradores | ✅ Implementado — RF13 |
 | GET | `/api/resenas.php?id_producto={id}` | Listar reseñas y promedio de un producto (público) | ✅ Implementado — RF14 |
+| DELETE | `/api/resenas.php?id={id}` | Eliminar una reseña (moderación; solo administradores). 404 si no existe | ✅ Implementado — RF14 |
 | GET | `/api/resenas.php` | Todas las reseñas de la tienda con producto y categoría, más resumen general (`total`, `promedio`, `distribucion` por estrellas); público | ✅ Implementado — RF14 |
 | POST | `/api/resenas.php` | Crear reseña (`{id_producto, calificacion, comentario}`); requiere sesión y haber comprado el producto | ✅ Implementado — RF07, RF14 |
 | GET | `/api/wishlist.php` | Listar la lista de deseos del usuario autenticado (requiere sesión) | ✅ Implementado — RF15 |
@@ -71,6 +72,7 @@ Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de
 - `lista-deseos.php` (RF15) muestra los productos guardados, con opción de agregarlos al carrito o quitarlos (`assets/js/lista-deseos.js`).
 
 - `admin.php` (pestaña Pedidos) lista todos los pedidos con los datos del cliente y permite cambiar su estado (RF13).
+- `admin.php` (pestaña Reseñas) lista todas las reseñas con producto, cliente, calificación y comentario; se pueden filtrar por estrellas y eliminar las inapropiadas.
 
 ## Pendiente
 
