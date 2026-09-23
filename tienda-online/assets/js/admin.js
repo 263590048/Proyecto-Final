@@ -540,3 +540,30 @@ async function eliminarResena(id) {
         console.error(error);
     }
 }
+
+// Sesión del administrador en el header: nombre y cierre de sesión (RF02)
+
+async function mostrarUsuarioAdmin() {
+    try {
+        const respuesta = await fetch('api/auth.php');
+        if (!respuesta.ok) return;
+        const usuario = await respuesta.json();
+        document.getElementById('admin-usuario').textContent = `👤 ${usuario.nombre} ${usuario.apellido}`;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function cerrarSesionAdmin() {
+    const boton = document.getElementById('btn-cerrar-sesion-admin');
+    boton.disabled = true;
+    try {
+        await fetch('api/auth.php', { method: 'DELETE' });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        window.location.href = 'login.php';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', mostrarUsuarioAdmin);

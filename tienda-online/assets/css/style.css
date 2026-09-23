@@ -2393,3 +2393,16 @@ table.tabla-admin .celda-comentario {
     height: 100%;
     object-fit: contain;
 }
+
+/* Panel de administración: sesión en el header */
+
+.admin-usuario {
+    color: var(--azul-oscuro);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+header nav #btn-cerrar-sesion-admin {
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+}

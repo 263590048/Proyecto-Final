@@ -10,7 +10,9 @@
     <header>
         <a href="index.php" class="logo"><img src="assets/img/logo.png" alt="TechStore" class="logo-img"></a>
         <nav>
+            <span class="admin-usuario" id="admin-usuario"></span>
             <a href="index.php">Ver tienda</a>
+            <button type="button" class="btn-secundario" id="btn-cerrar-sesion-admin" onclick="cerrarSesionAdmin()">Cerrar sesión</button>
         </nav>
     </header>
 
