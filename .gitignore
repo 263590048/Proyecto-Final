@@ -8,6 +8,3 @@
 /tienda-online/assets/img/productos/subidas/*
 !/tienda-online/assets/img/productos/subidas/.gitkeep
 !/tienda-online/assets/img/productos/subidas/.htaccess
-
-# Configuración local del asistente de código (no es parte del proyecto)
-/.claude/
