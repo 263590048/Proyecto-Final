@@ -1917,3 +1917,203 @@ table.tabla-admin .acciones button {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+/* Checkout: proceso de pago (RF13) */
+
+.oculto {
+    display: none !important;
+}
+
+form.formulario.formulario-checkout {
+    flex-grow: 1;
+    max-width: none;
+    margin: 0;
+}
+
+.formulario-checkout fieldset {
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.formulario-checkout legend {
+    padding: 0 0.4rem;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+}
+
+form.formulario .opcion-pago {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    color: var(--texto);
+    cursor: pointer;
+}
+
+form.formulario .opcion-pago:has(input:checked) {
+    border-color: var(--acento);
+    background: #f1f5fc;
+}
+
+form.formulario .opcion-pago input {
+    accent-color: var(--acento);
+}
+
+.fila-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.8rem;
+}
+
+.ayuda-pago {
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+}
+
+.volver-carrito {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--acento);
+}
+
+/* Confirmación del pedido (RF20) */
+
+.confirmacion-pedido {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.confirmacion-pedido h3 {
+    color: var(--azul-oscuro);
+}
+
+.confirmacion-pedido .item-carrito {
+    box-shadow: none;
+    border: 1px solid var(--borde);
+    margin-bottom: 0;
+}
+
+.confirmacion-cabecera {
+    text-align: center;
+}
+
+.confirmacion-cabecera h2 {
+    color: var(--azul-oscuro);
+    margin: 0.6rem 0 0.3rem;
+}
+
+.confirmacion-icono {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #16a34a;
+    color: #fff;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aviso-pago {
+    background: var(--fondo);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.88rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.aviso-pago.exito {
+    background: #eaf7ee;
+    color: #15803d;
+}
+
+.confirmacion-datos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem 1.5rem;
+}
+
+.confirmacion-datos > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    font-size: 0.88rem;
+}
+
+.confirmacion-datos > div > span:first-child {
+    color: var(--texto-suave);
+    font-size: 0.78rem;
+}
+
+.confirmacion-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    border-top: 1px solid var(--borde);
+    padding-top: 1rem;
+}
+
+.confirmacion-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    justify-content: flex-end;
+}
+
+a.boton-enlace {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+a.boton-enlace.btn-secundario {
+    color: var(--azul-oscuro);
+}
+
+@media (max-width: 700px) {
+    .confirmacion-pedido {
+        padding: 1.2rem;
+    }
+
+    .confirmacion-datos {
+        grid-template-columns: 1fr;
+    }
+
+    .confirmacion-acciones > * {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+}
+
+@media print {
+    header,
+    footer,
+    .confirmacion-acciones {
+        display: none !important;
+    }
+
+    .confirmacion-pedido {
+        box-shadow: none;
+    }
+}

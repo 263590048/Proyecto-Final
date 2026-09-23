@@ -100,7 +100,8 @@ function agregarAlCarrito(producto) {
         carrito.push({
             id_producto: producto.id_producto,
             nombre: producto.nombre,
-            precio: Number(producto.precio),
+            // Mismo precio que cobra el servidor (Pedido::crear usa precio_oferta si existe)
+            precio: Number(producto.precio_oferta || producto.precio),
             imagen: producto.imagen,
             cantidad: 1
         });

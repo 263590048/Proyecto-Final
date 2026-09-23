@@ -261,15 +261,27 @@ async function cargarTablaUsuarios() {
     }
 }
 
-function abrirModalUsuario(usuario) {
+function abrirModalUsuario(usuario = null) {
     const modal = document.getElementById('modal-usuario');
     const form = document.getElementById('form-usuario');
+    const titulo = document.getElementById('titulo-modal-usuario');
+    const etiquetaPassword = document.getElementById('etiqueta-password-usuario');
 
     form.reset();
+    form.elements.id_usuario.value = '';
     document.getElementById('mensaje-error-usuario').textContent = '';
 
-    for (const campo in usuario) {
-        if (form.elements[campo]) form.elements[campo].value = usuario[campo];
+    if (usuario) {
+        titulo.textContent = 'Editar usuario';
+        etiquetaPassword.textContent = 'Nueva contraseña (dejar vacío para no cambiarla)';
+        form.elements.password.required = false;
+        for (const campo in usuario) {
+            if (form.elements[campo]) form.elements[campo].value = usuario[campo];
+        }
+    } else {
+        titulo.textContent = 'Agregar usuario';
+        etiquetaPassword.textContent = 'Contraseña';
+        form.elements.password.required = true;
     }
 
     modal.classList.remove('oculto');
@@ -297,7 +309,7 @@ async function eliminarUsuario(id) {
 
 // Gestión de pedidos (RF13), consumiendo api/pedidos.php
 
-const ESTADOS_PEDIDO = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'];
+const ESTADOS_PEDIDO = ['pendiente', 'pagado', 'procesando', 'enviado', 'entregado', 'cancelado'];
 
 async function cargarTablaPedidos() {
     const cuerpo = document.getElementById('cuerpo-tabla-pedidos');
@@ -368,10 +380,14 @@ document.getElementById('form-usuario').addEventListener('submit', async (evento
     const datos = Object.fromEntries(new FormData(form));
     const id = datos.id_usuario;
     delete datos.id_usuario;
+    if (id && !datos.password) delete datos.password; // al editar, vacío = conservar la contraseña actual
+
+    const metodo = id ? 'PUT' : 'POST';
+    const url = id ? `api/usuarios.php?id=${id}` : 'api/usuarios.php';
 
     try {
-        const respuesta = await fetch(`api/usuarios.php?id=${id}`, {
-            method: 'PUT',
+        const respuesta = await fetch(url, {
+            method: metodo,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });

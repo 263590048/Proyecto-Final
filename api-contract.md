@@ -10,7 +10,7 @@ Base URL en desarrollo (dentro de XAMPP htdocs): `http://localhost/Tienda en Lin
 | PUT | `/api/productos.php?id={id}` | Actualizar producto (solo administradores) | ✅ Implementado — RF16 |
 | DELETE | `/api/productos.php?id={id}` | Eliminar producto (solo administradores) | ✅ Implementado — RF16 |
 | GET | `/api/categorias.php` | Consultar categorías (público) | ✅ Implementado |
-| POST | `/api/pedidos.php` | Crear pedido (`{items:[{id_producto, cantidad}]}`); requiere sesión, `id_usuario` se toma de `$_SESSION` | ✅ Implementado — RF11 |
+| POST | `/api/pedidos.php` | Crear y pagar pedido (`{items:[{id_producto, cantidad}], direccion_envio, telefono_contacto, metodo_pago, tarjeta?}`); requiere sesión, `id_usuario` se toma de `$_SESSION`. `metodo_pago`: `tarjeta` \| `transferencia` \| `contra_entrega`; con `tarjeta` se envía `{titular, numero, mes, anio, cvv}`. Responde 402 si la pasarela rechaza el pago | ✅ Implementado — RF11, RF13 |
 | GET | `/api/pedidos.php` | Historial de pedidos del usuario autenticado (requiere sesión) | ✅ Implementado — RF12 |
 | GET | `/api/pedidos.php?todos=1` | Listado completo de pedidos, con datos del cliente (solo administradores) | ✅ Implementado — RF13 |
 | GET | `/api/pedidos.php?id={id}` | Detalle de un pedido con sus productos (solo el dueño o un admin) | ✅ Implementado — RF12 |
@@ -23,7 +23,7 @@ Base URL en desarrollo (dentro de XAMPP htdocs): `http://localhost/Tienda en Lin
 | POST | `/api/auth.php` | Iniciar sesión (correo + password), inicia sesión PHP | ✅ Implementado — RF02 |
 | GET | `/api/auth.php` | Consultar el usuario de la sesión activa | ✅ Implementado — RF02 |
 | DELETE | `/api/auth.php` | Cerrar sesión | ✅ Implementado — RF02 |
-| POST | `/api/usuarios.php` | Registrar usuario (público) | ✅ Implementado — RF01 |
+| POST | `/api/usuarios.php` | Registrar usuario. Público: siempre crea `cliente` (se ignora `tipo_usuario`). Si lo hace un administrador desde el panel, puede elegir `cliente` o `administrador` | ✅ Implementado — RF01, RF18 |
 | GET | `/api/usuarios.php` | Listar/consultar usuarios (solo administradores) | ✅ Implementado — RF18 |
 | PUT | `/api/usuarios.php?id={id}` | Actualizar usuario (solo administradores) | ✅ Implementado — RF18 |
 | DELETE | `/api/usuarios.php?id={id}` | Eliminar usuario (solo administradores) | ✅ Implementado — RF18 |
@@ -53,14 +53,16 @@ Todos los endpoints de escritura (`pedidos`, `resenas`, `wishlist`, `productos`,
 ## Convenciones
 
 - Todas las respuestas son JSON.
-- Los errores devuelven `{ "error": "mensaje" }` con el código HTTP correspondiente (404, 405, 500).
+- Los errores devuelven `{ "error": "mensaje" }` con el código HTTP correspondiente (400, 401, 402, 403, 404, 405, 500).
 - Los endpoints de escritura (POST/PUT) esperan el cuerpo como JSON (`Content-Type: application/json`).
 
 ## Frontend — completo
 
-Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de producto con reseñas y lista de deseos, carrito, historial de pedidos) y el panel de administración (productos, categorías y usuarios) ya están implementadas en HTML/CSS/JS y consumen la API de arriba:
+Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de producto con reseñas y lista de deseos, carrito, historial de pedidos) y el panel de administración (productos, categorías y usuarios, incluida la creación de usuarios) ya están implementadas en HTML/CSS/JS y consumen la API de arriba:
 
-- El carrito usa `localStorage` para armar el pedido; al finalizar compra hace `POST /api/pedidos.php` con la sesión activa (`assets/js/carrito.js`). Si el cliente no ha iniciado sesión, se le redirige a `login.php`.
+- El carrito usa `localStorage` para armar el pedido; "Finalizar compra" lleva a `checkout.php` (RF13), donde el cliente indica dirección de envío y método de pago y se hace `POST /api/pedidos.php` con la sesión activa (`assets/js/checkout.js`). Si el cliente no ha iniciado sesión, se le redirige a `login.php`.
+- El pago con tarjeta es **simulado** (`model/Pago.php`): valida titular, número (algoritmo de Luhn), vencimiento y CVV, y cobra dentro de la misma transacción que registra el pedido; si se rechaza, se hace rollback. Solo se guarda `Tarjeta •••• 1234` en `pedidos.referencia_pago`, nunca el número completo ni el CVV. Tarjeta de prueba aprobada: `4242 4242 4242 4242`; rechazada: `4000 0000 0000 0002`. Con tarjeta el pedido queda `pagado`; con transferencia o contra entrega queda `pendiente` hasta que el admin confirme.
+- `confirmacion.php?id={id}` (RF20) muestra el comprobante del pedido: número, fecha, estado, método de pago, dirección, productos y total, con opción de imprimir. También se abre desde "Ver comprobante" en `mis-pedidos.php`.
 - El header (`assets/js/cart-utils.js`, función `actualizarEstadoSesion`) consulta `GET /api/auth.php` en cada página y muestra "Hola, {nombre}" + "Salir" cuando hay sesión activa, o "Iniciar sesión" si no la hay. A los clientes también les muestra un enlace a su lista de deseos.
 - `producto.php` muestra las reseñas del producto con su promedio, un formulario para publicar una reseña propia (si hay sesión) y un botón para agregar/quitar de la lista de deseos (`assets/js/producto.js`).
 - `mis-pedidos.php` (RF12) lista el historial de pedidos del cliente autenticado, con detalle expandible por pedido (`assets/js/mis-pedidos.js`).

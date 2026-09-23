@@ -36,8 +36,17 @@ switch ($metodo) {
         break;
 
     // RF01: registro público de una cuenta nueva
+    // RF18: un administrador también crea usuarios desde el panel y puede elegir su tipo
     case 'POST':
         $datos = json_decode(file_get_contents('php://input'), true) ?? [];
+        if (!esAdministrador()) {
+            // El registro público siempre crea clientes, aunque se envíe otro tipo_usuario
+            $datos['tipo_usuario'] = 'cliente';
+        } elseif (!in_array($datos['tipo_usuario'] ?? 'cliente', ['cliente', 'administrador'], true)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Tipo de usuario inválido']);
+            break;
+        }
         try {
             $nuevoId = $controller->registrar($datos);
             http_response_code(201);

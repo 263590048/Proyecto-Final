@@ -63,6 +63,10 @@ switch ($metodo) {
             $nuevoId = $controller->crearPedido($datos);
             http_response_code(201);
             echo json_encode(['id_pedido' => $nuevoId]);
+        } catch (PagoRechazadoException $e) {
+            // RF13: 402 Payment Required cuando la pasarela rechaza el cobro
+            http_response_code(402);
+            echo json_encode(['error' => $e->getMessage()]);
         } catch (InvalidArgumentException|RuntimeException $e) {
             http_response_code(400);
             echo json_encode(['error' => $e->getMessage()]);

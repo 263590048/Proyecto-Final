@@ -41,7 +41,12 @@ CREATE TABLE pedidos (
     id_usuario INT NOT NULL,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
     total DECIMAL(10,2) NOT NULL,
-    estado ENUM('pendiente', 'procesando', 'enviado', 'entregado', 'cancelado') NOT NULL DEFAULT 'pendiente',
+    estado ENUM('pendiente', 'pagado', 'procesando', 'enviado', 'entregado', 'cancelado') NOT NULL DEFAULT 'pendiente',
+    -- RF13: datos del pago y del envío (de la tarjeta solo se guardan los últimos 4 dígitos)
+    metodo_pago ENUM('tarjeta', 'transferencia', 'contra_entrega'),
+    referencia_pago VARCHAR(50),
+    direccion_envio VARCHAR(255),
+    telefono_contacto VARCHAR(20),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 

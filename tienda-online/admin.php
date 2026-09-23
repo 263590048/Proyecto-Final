@@ -70,6 +70,7 @@
         <div class="admin-contenido seccion-admin oculto" id="seccion-usuarios">
             <div class="admin-header">
                 <h2>Gestión de usuarios</h2>
+                <button class="btn-acento" onclick="abrirModalUsuario()">+ Agregar usuario</button>
             </div>
 
             <table class="tabla-admin">
@@ -191,7 +192,7 @@
 
     <div class="modal-fondo oculto" id="modal-usuario">
         <form class="formulario" id="form-usuario">
-            <h3 style="color: var(--azul-oscuro);">Editar usuario</h3>
+            <h3 id="titulo-modal-usuario" style="color: var(--azul-oscuro);">Editar usuario</h3>
             <input type="hidden" name="id_usuario">
 
             <label>
@@ -205,6 +206,10 @@
             <label>
                 Correo electrónico
                 <input type="email" name="correo" required>
+            </label>
+            <label>
+                <span id="etiqueta-password-usuario">Contraseña</span>
+                <input type="password" name="password" minlength="6" autocomplete="new-password">
             </label>
             <label>
                 Teléfono

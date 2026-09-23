@@ -49,7 +49,11 @@ erDiagram
         int id_usuario FK
         datetime fecha
         decimal total
-        enum estado "pendiente | pagado | enviado | entregado | cancelado"
+        enum estado "pendiente | pagado | procesando | enviado | entregado | cancelado"
+        enum metodo_pago "tarjeta | transferencia | contra_entrega"
+        varchar referencia_pago
+        varchar direccion_envio
+        varchar telefono_contacto
     }
 
     DETALLE_PEDIDO {

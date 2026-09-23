@@ -18,6 +18,8 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | CP04 | Login con contraseña incorrecta | Ingresar correo válido y contraseña errónea | La API responde 401 y se muestra "Correo o contraseña incorrectos" | ✅ Verificado (curl) |
 | CP05 | Acceso a `api/usuarios.php` sin sesión de administrador | Hacer `GET /api/usuarios.php` sin haber iniciado sesión como admin | Responde 403 "Acceso restringido a administradores" | ✅ Verificado (curl) |
 | CP06 | Administrar usuarios | Iniciar sesión como `admin@techstore.com`, ir a panel admin → pestaña Usuarios, editar el tipo de un usuario y eliminarlo | La tabla de usuarios se actualiza sin recargar la página | ✅ Verificado (curl + navegador) |
+| CP06b | Crear usuario desde el panel | Como administrador, en admin → Usuarios → "+ Agregar usuario", llenar nombre, apellido, correo, contraseña y tipo "Administrador" | El usuario aparece en la tabla con el tipo elegido y puede iniciar sesión | ✅ Verificado (curl + navegador) 2026-09-22 |
+| CP06c | Registro público no puede crear administradores | `POST /api/usuarios.php` sin sesión y con `"tipo_usuario":"administrador"` | Responde 201 pero la cuenta se crea como `cliente` | ✅ Verificado (curl) 2026-09-22 |
 | CP07 | Cerrar sesión | `DELETE /api/auth.php` (o el flujo de logout de la UI) | La sesión se destruye; una siguiente petición a `GET /api/auth.php` responde 401 | ✅ Verificado (curl) |
 
 ## Catálogo y búsqueda (RF04–RF07)
@@ -40,6 +42,18 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | CP16 | Crear pedido con stock insuficiente | Pedir una cantidad mayor a `productos.cantidad` disponible | Responde 400 "Stock insuficiente para el producto {id}"; no se crea el pedido ni se descuenta stock | ✅ Verificado (curl) |
 | CP17 | Consultar historial de pedidos | `GET /api/pedidos.php?id_usuario={id}` | Devuelve los pedidos de ese usuario ordenados por fecha descendente | ✅ Verificado (curl) |
 | CP18 | Actualizar estado de un pedido | `PUT /api/pedidos.php?id={id}` con `{"estado":"pagado"}` | El pedido cambia de estado; un estado inválido responde 400 | ✅ Verificado (curl) |
+
+## Pago y confirmación (RF13, RF20)
+
+| ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
+|---|---|---|---|---|
+| CP29 | Pagar con tarjeta válida | En `checkout.php` elegir "Tarjeta", usar `4242 4242 4242 4242`, vencimiento futuro, CVV `123` y confirmar | Responde 201; el pedido queda `pagado` con `referencia_pago = "Tarjeta •••• 4242"` y redirige a `confirmacion.php` | ✅ Verificado (curl + navegador) 2026-09-22 |
+| CP30 | Tarjeta rechazada por el banco | Repetir CP29 con `4000 0000 0000 0002` | Responde 402 "El banco rechazó la tarjeta..."; no se crea el pedido ni se descuenta stock | ✅ Verificado (curl + navegador) 2026-09-22 |
+| CP31 | Datos de tarjeta inválidos | Número que no pasa Luhn (`4242 4242 4242 4241`) o tarjeta vencida | Responde 400 con "El número de tarjeta no es válido" / "La tarjeta está vencida..." | ✅ Verificado (curl) 2026-09-22 |
+| CP32 | Pedido sin dirección de envío o con método inválido | `POST /api/pedidos.php` con `direccion_envio` vacío, o `metodo_pago = "bitcoin"` | Responde 400 "Debe indicar la dirección de envío" / "Método de pago inválido" | ✅ Verificado (curl) 2026-09-22 |
+| CP33 | Pagar por transferencia | En `checkout.php` elegir "Transferencia bancaria" y confirmar | El pedido queda `pendiente`; la confirmación muestra los datos de la cuenta y el monto a transferir | ✅ Verificado (curl + navegador) 2026-09-22 |
+| CP34 | Confirmación del pedido | Tras CP29, revisar `confirmacion.php?id={id}` | Muestra número de pedido, fecha, estado, método de pago, dirección, productos y total; "Imprimir comprobante" abre el diálogo de impresión | ✅ Verificado en navegador 2026-09-22 |
+| CP35 | Confirmación de un pedido ajeno | Abrir `confirmacion.php?id={id}` de otro cliente | La API responde 403 y se redirige a `login.php` | |
 
 ## Reseñas y wishlist (RF14, RF15)
 

@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . '/../config/conexion.php';
+require_once __DIR__ . '/Pago.php';
 
 class Pedido
 {
     private PDO $pdo;
 
-    private const ESTADOS_VALIDOS = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'];
+    private const ESTADOS_VALIDOS = ['pendiente', 'pagado', 'procesando', 'enviado', 'entregado', 'cancelado'];
 
     public function __construct()
     {
@@ -16,16 +17,27 @@ class Pedido
     // RF11: registra el pedido junto con su detalle en una sola transacción.
     // El precio de cada línea se toma del producto en base de datos (no del cliente)
     // y se valida/descuenta el stock disponible para evitar sobreventa.
+    // RF13: el cobro se hace dentro de la misma transacción; si el pago se rechaza,
+    // se hace rollback y no queda ni el pedido ni el stock descontado.
     public function crear(array $datos): int
     {
         $idUsuario = (int) ($datos['id_usuario'] ?? 0);
         $items = $datos['items'] ?? [];
+        $direccionEnvio = trim((string) ($datos['direccion_envio'] ?? ''));
+        $telefonoContacto = trim((string) ($datos['telefono_contacto'] ?? ''));
+        $metodoPago = (string) ($datos['metodo_pago'] ?? '');
 
         if ($idUsuario <= 0) {
             throw new InvalidArgumentException('Debe indicar id_usuario');
         }
         if (!is_array($items) || count($items) === 0) {
             throw new InvalidArgumentException('El pedido debe incluir al menos un producto');
+        }
+        if ($direccionEnvio === '') {
+            throw new InvalidArgumentException('Debe indicar la dirección de envío');
+        }
+        if ($telefonoContacto !== '' && !preg_match('/^[\d\s+\-]{8,20}$/', $telefonoContacto)) {
+            throw new InvalidArgumentException('El teléfono de contacto no es válido');
         }
 
         $this->pdo->beginTransaction();
@@ -73,10 +85,21 @@ class Pedido
                 ];
             }
 
+            $pago = (new Pago())->procesar($metodoPago, $datos['tarjeta'] ?? [], $total);
+
             $stmtPedido = $this->pdo->prepare(
-                'INSERT INTO pedidos (id_usuario, total, estado) VALUES (:id_usuario, :total, "pendiente")'
+                'INSERT INTO pedidos (id_usuario, total, estado, metodo_pago, referencia_pago, direccion_envio, telefono_contacto)
+                 VALUES (:id_usuario, :total, :estado, :metodo_pago, :referencia_pago, :direccion_envio, :telefono_contacto)'
             );
-            $stmtPedido->execute(['id_usuario' => $idUsuario, 'total' => $total]);
+            $stmtPedido->execute([
+                'id_usuario' => $idUsuario,
+                'total' => $total,
+                'estado' => $pago['estado'],
+                'metodo_pago' => $metodoPago,
+                'referencia_pago' => $pago['referencia'],
+                'direccion_envio' => $direccionEnvio,
+                'telefono_contacto' => $telefonoContacto !== '' ? $telefonoContacto : null,
+            ]);
             $idPedido = (int) $this->pdo->lastInsertId();
 
             foreach ($lineas as $linea) {

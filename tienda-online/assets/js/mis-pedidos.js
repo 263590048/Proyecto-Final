@@ -58,7 +58,9 @@ async function verDetallePedido(idPedido) {
                 <span>${item.nombre} × ${item.cantidad}</span>
                 <span>Q${(Number(item.precio) * item.cantidad).toFixed(2)}</span>
             </div>
-        `).join('');
+        `).join('') + `
+            <a href="confirmacion.php?id=${pedido.id_pedido}" style="color: var(--acento); font-size: 0.85rem;">Ver comprobante →</a>
+        `;
         contenedor.dataset.cargado = '1';
     } catch (error) {
         contenedor.innerHTML = '<p>No se pudo cargar el detalle de este pedido.</p>';
