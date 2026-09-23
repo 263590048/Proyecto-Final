@@ -61,6 +61,8 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 |---|---|---|---|---|
 | CP19 | Reseñar un producto comprado | Con un usuario que ya tiene un pedido con ese producto, `POST /api/resenas.php` | Responde 201; la reseña aparece en el detalle del producto con el promedio recalculado | ✅ Verificado (curl) |
 | CP20 | Reseñar un producto no comprado | Repetir CP19 con un producto que el usuario nunca compró | Responde 400 "Solo puedes reseñar productos que hayas comprado" | ✅ Verificado (curl) |
+| CP20b | Ver todas las reseñas | Entrar a `resenas.php` | Se listan todas las reseñas con producto, categoría, estrellas, autor y fecha; el resumen muestra el promedio general y cuántas hay de cada calificación | ✅ Verificado en navegador 2026-09-22 |
+| CP20c | Filtrar reseñas | En `resenas.php`, hacer clic en la barra de 3 ★, luego filtrar por categoría "Accesorios", ordenar por "Peor calificadas" y buscar "batería" | La lista y el contador ("Mostrando X de Y") se actualizan sin recargar la página | ✅ Verificado en navegador 2026-09-22 |
 | CP21 | Agregar y quitar de la lista de deseos | `POST` y luego `DELETE` en `api/wishlist.php` para el mismo usuario/producto | El producto se agrega y luego se elimina correctamente de la wishlist | ✅ Verificado (curl) |
 
 ## Panel de administración (RF16–RF18)

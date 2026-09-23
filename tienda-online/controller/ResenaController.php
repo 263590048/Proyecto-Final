@@ -23,6 +23,14 @@ class ResenaController
         ];
     }
 
+    public function listarTodas(): array
+    {
+        return [
+            'resenas' => $this->modelo->obtenerTodas(),
+            'resumen' => $this->modelo->obtenerResumenGeneral(),
+        ];
+    }
+
     // Para que el frontend sepa si debe mostrar el formulario de reseña
     public function puedeResenar(int $idUsuario, int $idProducto): bool
     {

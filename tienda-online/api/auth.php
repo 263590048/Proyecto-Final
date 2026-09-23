@@ -36,7 +36,16 @@ switch ($metodo) {
             echo json_encode(['error' => 'No hay sesión activa']);
             break;
         }
-        echo json_encode($controller->detalle((int) $_SESSION['id_usuario']));
+        $usuario = $controller->detalle((int) $_SESSION['id_usuario']);
+        if (!$usuario) {
+            // La cuenta se eliminó mientras la sesión seguía abierta
+            $_SESSION = [];
+            session_destroy();
+            http_response_code(401);
+            echo json_encode(['error' => 'No hay sesión activa']);
+            break;
+        }
+        echo json_encode($usuario);
         break;
 
     // RF02: cierra sesión

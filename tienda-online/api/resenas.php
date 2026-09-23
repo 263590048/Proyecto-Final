@@ -10,10 +10,10 @@ $idProducto = isset($_GET['id_producto']) ? (int) $_GET['id_producto'] : null;
 
 switch ($metodo) {
     case 'GET':
-        // Listar reseñas de un producto es público, no requiere sesión
+        // Listar reseñas es público, no requiere sesión
         if (!$idProducto) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Debe indicar id_producto']);
+            // Sin id_producto: todas las reseñas de la tienda (página resenas.php)
+            echo json_encode($controller->listarTodas());
             break;
         }
         $datos = $controller->listarPorProducto($idProducto);

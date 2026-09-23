@@ -24,6 +24,7 @@
         <nav>
             <a href="index.php">Inicio</a>
             <a href="productos.php">Catálogo</a>
+            <a href="resenas.php">Reseñas</a>
             <a href="carrito.php" class="activo">Carrito (<span id="contador-carrito">0</span>)</a>
             <a href="login.php" class="boton">Iniciar sesión</a>
         </nav>
@@ -67,6 +68,7 @@
                 <h4>Enlaces</h4>
                 <a href="index.php">Inicio</a>
                 <a href="productos.php">Catálogo</a>
+                <a href="resenas.php">Reseñas</a>
                 <a href="carrito.php">Carrito</a>
                 <a href="nosotros.php">Quiénes somos</a>
                 <a href="login.php">Iniciar sesión</a>

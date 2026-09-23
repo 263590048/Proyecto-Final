@@ -1637,6 +1637,12 @@ table.tabla-admin .acciones button {
         max-width: none;
     }
 
+    header nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem 1.1rem;
+    }
+
     .layout-catalogo,
     .layout-carrito {
         flex-direction: column;
@@ -2115,5 +2121,172 @@ a.boton-enlace.btn-secundario {
 
     .confirmacion-pedido {
         box-shadow: none;
+    }
+}
+
+/* Página de todas las reseñas (RF14) */
+
+.layout-resenas {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.resumen-resenas {
+    width: 260px;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    text-align: center;
+    position: sticky;
+    top: 1rem;
+}
+
+.promedio-general {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    line-height: 1;
+}
+
+.total-resenas {
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+    margin: 0.4rem 0 1rem;
+}
+
+.distribucion-resenas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.fila-distribucion {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr 1.8rem;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    color: var(--texto-suave);
+    padding: 0.25rem 0.3rem;
+    font-size: 0.8rem;
+}
+
+.fila-distribucion:hover {
+    background: var(--fondo);
+}
+
+.barra-distribucion {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--fondo);
+    overflow: hidden;
+}
+
+.barra-distribucion span {
+    display: block;
+    height: 100%;
+    background: #f5b301;
+}
+
+.contenido-resenas {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.filtros-resenas {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 0.7rem;
+    margin-bottom: 0.8rem;
+}
+
+.filtros-resenas input,
+.filtros-resenas select {
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: #fff;
+    min-width: 0;
+}
+
+.conteo-resenas {
+    color: var(--texto-suave);
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.tarjeta-resena {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.tarjeta-resena .imagen-producto {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    font-size: 1.6rem;
+}
+
+.tarjeta-resena-contenido {
+    flex-grow: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.tarjeta-resena-contenido p {
+    font-size: 0.9rem;
+    color: var(--texto);
+}
+
+.resena-producto {
+    font-weight: 600;
+    color: var(--azul-oscuro);
+}
+
+.resena-producto:hover {
+    color: var(--acento);
+}
+
+.resena-categoria {
+    align-self: flex-start;
+    background: var(--fondo);
+    color: var(--azul-oscuro);
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+}
+
+.resena-autor {
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+}
+
+@media (max-width: 850px) {
+    .layout-resenas {
+        flex-direction: column;
+    }
+
+    .resumen-resenas {
+        width: 100%;
+        position: static;
+    }
+
+    .filtros-resenas {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filtros-resenas input {
+        grid-column: 1 / -1;
     }
 }

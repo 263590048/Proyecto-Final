@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - TechStore</title>
+    <title>Reseñas - TechStore</title>
     <link rel="stylesheet" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
 </head>
 <body>
@@ -23,8 +23,8 @@
 
         <nav>
             <a href="index.php">Inicio</a>
-            <a href="productos.php" class="activo">Catálogo</a>
-            <a href="resenas.php">Reseñas</a>
+            <a href="productos.php">Catálogo</a>
+            <a href="resenas.php" class="activo">Reseñas</a>
             <div class="menu-carrito">
                 <button class="btn-carrito-nav" onclick="toggleMenuCarrito(event)">Carrito (<span id="contador-carrito">0</span>)</button>
                 <div class="panel-carrito-mini" id="panel-carrito-mini"></div>
@@ -34,34 +34,39 @@
     </header>
 
     <main>
-        <h2 id="titulo-catalogo" style="margin-bottom: 1rem; color: var(--azul-oscuro);">Catálogo de productos</h2>
-        <p id="filtro-activo-info" class="filtro-activo-info" style="display: none;"></p>
+        <h2 style="color: var(--azul-oscuro); margin-bottom: 1.5rem;">Reseñas de nuestros clientes</h2>
 
-        <input type="search" id="buscador" class="buscador" placeholder="Buscar productos...">
-
-        <div class="layout-catalogo">
-            <aside class="filtros">
-                <h3>Filtros</h3>
-                <fieldset class="filtro-grupo-categorias">
-                    <legend>Categorías</legend>
-                    <p class="ayuda-filtro">Selecciona una o varias categorías.</p>
-                    <div class="lista-categorias-filtro" id="filtro-categoria"></div>
-                </fieldset>
-                <label>
-                    Precio máximo
-                    <input type="number" id="filtro-precio" placeholder="Ej. 3000" min="0">
-                </label>
-                <label>
-                    <input type="checkbox" id="filtro-disponible" style="width: auto; display: inline;">
-                    Solo disponibles
-                </label>
+        <div class="layout-resenas">
+            <aside class="resumen-resenas" id="resumen-resenas">
+                <p>Cargando resumen...</p>
             </aside>
 
-            <div class="contenido-catalogo">
-                <div class="grid-productos" id="grid-productos">
-                    <p>Cargando productos...</p>
+            <section class="contenido-resenas">
+                <div class="filtros-resenas">
+                    <input type="search" id="buscar-resena" placeholder="Buscar por producto o comentario...">
+                    <select id="filtro-categoria-resena" aria-label="Filtrar por categoría">
+                        <option value="">Categoría: todas</option>
+                    </select>
+                    <select id="filtro-calificacion-resena" aria-label="Filtrar por calificación">
+                        <option value="">Estrellas: todas</option>
+                        <option value="5">5 estrellas</option>
+                        <option value="4">4 estrellas</option>
+                        <option value="3">3 estrellas</option>
+                        <option value="2">2 estrellas</option>
+                        <option value="1">1 estrella</option>
+                    </select>
+                    <select id="orden-resenas" aria-label="Ordenar reseñas">
+                        <option value="recientes">Más recientes</option>
+                        <option value="mejor">Mejor calificadas</option>
+                        <option value="peor">Peor calificadas</option>
+                    </select>
                 </div>
-            </div>
+
+                <p class="conteo-resenas" id="conteo-resenas"></p>
+                <div id="lista-resenas">
+                    <p>Cargando reseñas...</p>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -100,6 +105,6 @@
     </footer>
 
     <script src="assets/js/cart-utils.js?v=<?php echo filemtime(__DIR__ . '/assets/js/cart-utils.js'); ?>"></script>
-    <script src="assets/js/productos.js?v=<?php echo filemtime(__DIR__ . '/assets/js/productos.js'); ?>"></script>
+    <script src="assets/js/resenas.js?v=<?php echo filemtime(__DIR__ . '/assets/js/resenas.js'); ?>"></script>
 </body>
 </html>

@@ -68,6 +68,46 @@ class Resena
         return $stmt->fetchAll();
     }
 
+    // Todas las reseñas de la tienda, con el producto y su categoría (página resenas.php)
+    public function obtenerTodas(): array
+    {
+        $stmt = $this->pdo->query(
+            'SELECT r.id_resena, r.id_producto, r.calificacion, r.comentario, r.fecha,
+                    u.nombre, u.apellido,
+                    p.nombre AS producto, p.imagen, c.nombre AS categoria
+             FROM resenas r
+             JOIN usuarios u ON u.id_usuario = r.id_usuario
+             JOIN productos p ON p.id_producto = r.id_producto
+             JOIN categorias c ON c.id_categoria = p.id_categoria
+             ORDER BY r.fecha DESC'
+        );
+        return $stmt->fetchAll();
+    }
+
+    // Promedio general y cuántas reseñas hay de cada calificación (5 a 1)
+    public function obtenerResumenGeneral(): array
+    {
+        $stmt = $this->pdo->query(
+            'SELECT calificacion, COUNT(*) AS cantidad FROM resenas GROUP BY calificacion'
+        );
+        $distribucion = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
+        foreach ($stmt->fetchAll() as $fila) {
+            $distribucion[(int) $fila['calificacion']] = (int) $fila['cantidad'];
+        }
+
+        $total = array_sum($distribucion);
+        $suma = 0;
+        foreach ($distribucion as $estrellas => $cantidad) {
+            $suma += $estrellas * $cantidad;
+        }
+
+        return [
+            'total' => $total,
+            'promedio' => $total > 0 ? round($suma / $total, 1) : null,
+            'distribucion' => $distribucion,
+        ];
+    }
+
     public function obtenerResumen(int $idProducto): array
     {
         $stmt = $this->pdo->prepare(
