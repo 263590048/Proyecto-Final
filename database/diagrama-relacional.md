@@ -7,6 +7,7 @@ erDiagram
     USUARIOS ||--o{ PEDIDOS : realiza
     USUARIOS ||--o{ RESENAS : escribe
     USUARIOS ||--o{ WISHLIST : guarda
+    USUARIOS ||--o{ RECUPERACIONES_PASSWORD : solicita
     CATEGORIAS ||--o{ PRODUCTOS : clasifica
     PRODUCTOS ||--o{ DETALLE_PEDIDO : incluido_en
     PRODUCTOS ||--o{ RESENAS : recibe
@@ -77,6 +78,15 @@ erDiagram
         int id_wishlist PK
         int id_usuario FK
         int id_producto FK
+    }
+
+    RECUPERACIONES_PASSWORD {
+        int id_recuperacion PK
+        int id_usuario FK
+        char token_hash "SHA-256 del token, UNIQUE"
+        datetime expira
+        tinyint usado
+        datetime creado_en
     }
 ```
 

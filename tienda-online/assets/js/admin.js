@@ -33,25 +33,75 @@ async function cargarTablaProductos() {
     }
 }
 
-function abrirModal(producto = null) {
+const CARPETA_IMAGENES_ADMIN = 'assets/img/productos/';
+
+// Llena el select de categorías del modal de producto (en vez de escribir el ID a mano)
+async function cargarOpcionesCategoria() {
+    const select = document.getElementById('select-categoria-producto');
+    try {
+        const respuesta = await fetch('api/categorias.php');
+        if (!respuesta.ok) throw new Error('La API respondió con error');
+        const categorias = await respuesta.json();
+        select.innerHTML = '<option value="">Selecciona una categoría</option>' + categorias.map(categoria =>
+            `<option value="${categoria.id_categoria}">${categoria.nombre}</option>`
+        ).join('');
+    } catch (error) {
+        select.innerHTML = '<option value="">No se pudieron cargar las categorías</option>';
+        console.error(error);
+    }
+}
+
+// Vista previa de la imagen actual (ruta guardada) o del archivo recién elegido
+function mostrarVistaPrevia(idContenedor, src) {
+    const contenedor = document.getElementById(idContenedor);
+    contenedor.innerHTML = src ? `<img src="${src}" alt="Vista previa">` : 'Sin imagen';
+}
+
+async function abrirModal(producto = null) {
     const modal = document.getElementById('modal-producto');
     const form = document.getElementById('form-producto');
     const titulo = document.getElementById('titulo-modal');
 
     form.reset();
+    form.elements.id_producto.value = '';
+    form.elements.imagen.value = '';
+    form.elements.imagen2.value = '';
     document.getElementById('mensaje-error-producto').textContent = '';
+
+    await cargarOpcionesCategoria();
 
     if (producto) {
         titulo.textContent = 'Editar producto';
         for (const campo in producto) {
-            if (form.elements[campo]) form.elements[campo].value = producto[campo];
+            if (form.elements[campo]) form.elements[campo].value = producto[campo] ?? '';
         }
     } else {
         titulo.textContent = 'Agregar producto';
     }
 
+    mostrarVistaPrevia('vista-previa-imagen', form.elements.imagen.value ? CARPETA_IMAGENES_ADMIN + form.elements.imagen.value : '');
+    mostrarVistaPrevia('vista-previa-imagen2', form.elements.imagen2.value ? CARPETA_IMAGENES_ADMIN + form.elements.imagen2.value : '');
+
     modal.classList.remove('oculto');
 }
+
+// Sube el archivo a api/imagenes.php y devuelve la ruta que se guarda en el producto
+async function subirImagenProducto(archivo) {
+    const datos = new FormData();
+    datos.append('imagen', archivo);
+
+    const respuesta = await fetch('api/imagenes.php', { method: 'POST', body: datos });
+    const resultado = await respuesta.json().catch(() => ({}));
+    if (!respuesta.ok) throw new Error(resultado.error || 'No se pudo subir la imagen.');
+    return resultado.imagen;
+}
+
+['imagen', 'imagen2'].forEach(campo => {
+    document.getElementById(`archivo-${campo}`).addEventListener('change', evento => {
+        const archivo = evento.target.files[0];
+        if (archivo) mostrarVistaPrevia(`vista-previa-${campo}`, URL.createObjectURL(archivo));
+    });
+});
 
 function cerrarModal() {
     document.getElementById('modal-producto').classList.add('oculto');
@@ -79,8 +129,16 @@ document.getElementById('form-producto').addEventListener('submit', async (event
 
     const metodo = id ? 'PUT' : 'POST';
     const url = id ? `api/productos.php?id=${id}` : 'api/productos.php';
+    const botonGuardar = form.querySelector('button[type="submit"]');
 
     try {
+        // Primero se suben las imágenes nuevas (si se eligieron) y se guarda su ruta en el producto
+        botonGuardar.disabled = true;
+        for (const campo of ['imagen', 'imagen2']) {
+            const archivo = document.getElementById(`archivo-${campo}`).files[0];
+            if (archivo) datos[campo] = await subirImagenProducto(archivo);
+        }
+
         const respuesta = await fetch(url, {
             method: metodo,
             headers: { 'Content-Type': 'application/json' },
@@ -95,8 +153,12 @@ document.getElementById('form-producto').addEventListener('submit', async (event
         cerrarModal();
         cargarTablaProductos();
     } catch (error) {
-        document.getElementById('mensaje-error-producto').textContent = 'No se pudo conectar con el servidor.';
+        document.getElementById('mensaje-error-producto').textContent = error instanceof TypeError
+            ? 'No se pudo conectar con el servidor.'
+            : error.message;
         console.error(error);
+    } finally {
+        botonGuardar.disabled = false;
     }
 });
 

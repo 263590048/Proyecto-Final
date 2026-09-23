@@ -4,12 +4,15 @@ Base URL en desarrollo (dentro de XAMPP htdocs): `http://localhost/Tienda en Lin
 
 | Método | Endpoint | Operación | Estado |
 |--------|----------|-----------|--------|
-| GET | `/api/productos.php` | Consultar todos los productos (público) | ✅ Implementado |
+| GET | `/api/productos.php` | Consultar todos los productos activos (público). Incluye `vendidos`, `promedio_calificacion` y `total_resenas` para ordenar por popularidad | ✅ Implementado — RF04, RF06 |
 | GET | `/api/productos.php?id={id}` | Consultar un producto (público) | ✅ Implementado |
 | POST | `/api/productos.php` | Crear producto (solo administradores) | ✅ Implementado — RF16 |
 | PUT | `/api/productos.php?id={id}` | Actualizar producto (solo administradores) | ✅ Implementado — RF16 |
 | DELETE | `/api/productos.php?id={id}` | Eliminar producto (solo administradores) | ✅ Implementado — RF16 |
 | GET | `/api/categorias.php` | Consultar categorías (público) | ✅ Implementado |
+| POST | `/api/imagenes.php` | Subir la imagen de un producto (`multipart/form-data`, campo `imagen`; JPG, PNG o WEBP de hasta 3 MB, validado por contenido). Devuelve `{imagen: "subidas/xxx.jpg"}`; solo administradores | ✅ Implementado — RF16 |
+| POST | `/api/recuperar.php` | Solicitar enlace para restablecer la contraseña (`{correo}`); responde igual exista o no el correo. En modo desarrollo incluye `enlace_desarrollo` | ✅ Implementado — RF03 |
+| PUT | `/api/recuperar.php` | Fijar la nueva contraseña (`{token, password, confirmacion}`); el token es de un solo uso y vence a los 30 minutos | ✅ Implementado — RF03 |
 | POST | `/api/pedidos.php` | Crear y pagar pedido (`{items:[{id_producto, cantidad}], direccion_envio, telefono_contacto, metodo_pago, tarjeta?}`); requiere sesión, `id_usuario` se toma de `$_SESSION`. `metodo_pago`: `tarjeta` \| `transferencia` \| `contra_entrega`; con `tarjeta` se envía `{titular, numero, mes, anio, cvv}`. Responde 402 si la pasarela rechaza el pago | ✅ Implementado — RF11, RF13 |
 | GET | `/api/pedidos.php` | Historial de pedidos del usuario autenticado (requiere sesión) | ✅ Implementado — RF12 |
 | GET | `/api/pedidos.php?todos=1` | Listado completo de pedidos, con datos del cliente (solo administradores) | ✅ Implementado — RF13 |
@@ -74,7 +77,15 @@ Todas las vistas de cliente (inicio, catálogo con búsqueda/filtros, detalle de
 - `admin.php` (pestaña Pedidos) lista todos los pedidos con los datos del cliente y permite cambiar su estado (RF13).
 - `admin.php` (pestaña Reseñas) lista todas las reseñas con producto, cliente, calificación y comentario; se pueden filtrar por estrellas y eliminar las inapropiadas.
 
+- Catálogo (`productos.php`, RF06): además de búsqueda y categorías, tiene rango de precio (mínimo y máximo, sobre el precio de oferta si existe), calificación mínima, "Solo disponibles" y orden por más vendidos, mejor calificados o precio. Cada tarjeta muestra su promedio de reseñas y unidades vendidas.
+- Panel admin → Productos: la categoría se elige de un `select` cargado desde `api/categorias.php`, y las imágenes se suben con `input type="file"` (con vista previa) a `assets/img/productos/subidas/`. Esa carpeta necesita permiso de escritura para el usuario de Apache y tiene un `.htaccess` que impide ejecutar scripts y listar archivos.
+- Recuperar contraseña (RF03): `login.php` → "¿Olvidaste tu contraseña?" → `recuperar.php` → enlace → `restablecer.php?token=...`. Los tokens se guardan hasheados (SHA-256) en `recuperaciones_password`.
+
+## Configuración para producción (`config/app.php`)
+
+- `URL_BASE`: la URL pública del hosting (se usa para armar el enlace de recuperación, en vez de confiar en el header `Host`).
+- `MODO_DESARROLLO = false`: el enlace de recuperación se envía por correo con `mail()` en lugar de mostrarse en pantalla. Requiere que el hosting tenga el envío de correo configurado.
+
 ## Pendiente
 
-- RF03: recuperación de contraseña (no implementada).
 - Publicar el repositorio en GitHub y desplegar el proyecto en un hosting para obtener la URL de producción.

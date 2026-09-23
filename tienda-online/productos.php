@@ -48,11 +48,33 @@
                     <div class="lista-categorias-filtro" id="filtro-categoria"></div>
                 </fieldset>
                 <label>
-                    Precio máximo
-                    <input type="number" id="filtro-precio" placeholder="Ej. 3000" min="0">
+                    Ordenar por
+                    <select id="orden-productos">
+                        <option value="">Relevancia</option>
+                        <option value="vendidos">Más vendidos</option>
+                        <option value="calificacion">Mejor calificados</option>
+                        <option value="precio-asc">Precio: menor a mayor</option>
+                        <option value="precio-desc">Precio: mayor a menor</option>
+                    </select>
                 </label>
+                <fieldset class="filtro-rango-precio">
+                    <legend>Rango de precio (Q)</legend>
+                    <div class="campos-rango">
+                        <input type="number" id="filtro-precio-min" placeholder="Mín." min="0" aria-label="Precio mínimo">
+                        <span>–</span>
+                        <input type="number" id="filtro-precio" placeholder="Máx." min="0" aria-label="Precio máximo">
+                    </div>
+                </fieldset>
                 <label>
-                    <input type="checkbox" id="filtro-disponible" style="width: auto; display: inline;">
+                    Calificación
+                    <select id="filtro-calificacion">
+                        <option value="">Cualquiera</option>
+                        <option value="4">4 ★ o más</option>
+                        <option value="3">3 ★ o más</option>
+                    </select>
+                </label>
+                <label class="opcion-check-filtro">
+                    <input type="checkbox" id="filtro-disponible">
                     Solo disponibles
                 </label>
             </aside>

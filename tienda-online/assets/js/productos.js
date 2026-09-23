@@ -121,12 +121,38 @@ function renderizarProductos(productos) {
                 <h3>${producto.nombre}</h3>
             </a>
             ${renderizarPrecioHtml(producto)}
+            ${popularidadHtml(producto)}
             ${Number(producto.cantidad) > 0
                 ? `<button onclick="agregarYAvisar(${producto.id_producto})">Agregar al carrito</button>`
                 : `<p class="sin-stock">Sin stock</p>`}
         </div>
     `).join('');
 }
+
+// Popularidad visible en la tarjeta: promedio de reseñas y unidades vendidas (RF06)
+function popularidadHtml(producto) {
+    const partes = [];
+    if (producto.total_resenas > 0) {
+        partes.push(`⭐ ${Number(producto.promedio_calificacion).toFixed(1)} (${producto.total_resenas})`);
+    }
+    if (Number(producto.vendidos) > 0) {
+        partes.push(`${producto.vendidos} vendido${Number(producto.vendidos) === 1 ? '' : 's'}`);
+    }
+    return partes.length ? `<p class="popularidad-producto">${partes.join(' · ')}</p>` : '';
+}
+
+// Precio que paga el cliente: el de oferta si existe
+function precioEfectivo(producto) {
+    return Number(producto.precio_oferta || producto.precio);
+}
+
+const ORDENES_CATALOGO = {
+    vendidos: (a, b) => Number(b.vendidos) - Number(a.vendidos),
+    calificacion: (a, b) => Number(b.promedio_calificacion ?? 0) - Number(a.promedio_calificacion ?? 0)
+        || b.total_resenas - a.total_resenas,
+    'precio-asc': (a, b) => precioEfectivo(a) - precioEfectivo(b),
+    'precio-desc': (a, b) => precioEfectivo(b) - precioEfectivo(a)
+};
 
 function agregarYAvisar(idProducto) {
     const producto = TODOS_LOS_PRODUCTOS.find(p => p.id_producto === idProducto);
@@ -138,17 +164,27 @@ function aplicarFiltros() {
     const texto = document.getElementById('buscador').value.trim().toLowerCase();
     const categoriasSeleccionadas = Array.from(document.querySelectorAll('#filtro-categoria input:checked'))
         .map(opcion => String(opcion.value));
+    const precioMin = document.getElementById('filtro-precio-min').value;
     const precioMax = document.getElementById('filtro-precio').value;
+    const calificacionMin = Number(document.getElementById('filtro-calificacion').value);
+    const orden = document.getElementById('orden-productos').value;
     const soloDisponibles = document.getElementById('filtro-disponible').checked;
 
     let resultado = TODOS_LOS_PRODUCTOS.filter(producto => {
         const coincideTexto = producto.nombre.toLowerCase().includes(texto);
         const coincideCategoria = categoriasSeleccionadas.length === 0 || categoriasSeleccionadas.includes(String(producto.id_categoria));
-        const coincidePrecio = !precioMax || Number(producto.precio) <= Number(precioMax);
+        const coincidePrecio = (!precioMin || precioEfectivo(producto) >= Number(precioMin))
+            && (!precioMax || precioEfectivo(producto) <= Number(precioMax));
+        const coincideCalificacion = !calificacionMin || Number(producto.promedio_calificacion ?? 0) >= calificacionMin;
         const coincideDisponibilidad = !soloDisponibles || Number(producto.cantidad) > 0;
 
-        return coincideTexto && coincideCategoria && coincidePrecio && coincideDisponibilidad && coincideFiltroSeccion(producto);
+        return coincideTexto && coincideCategoria && coincidePrecio && coincideCalificacion
+            && coincideDisponibilidad && coincideFiltroSeccion(producto);
     });
+
+    if (ORDENES_CATALOGO[orden]) {
+        resultado = [...resultado].sort(ORDENES_CATALOGO[orden]);
+    }
 
     renderizarProductos(resultado);
 }
@@ -158,6 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('buscador').addEventListener('input', aplicarFiltros);
     document.getElementById('filtro-categoria').addEventListener('change', aplicarFiltros);
+    document.getElementById('filtro-precio-min').addEventListener('input', aplicarFiltros);
     document.getElementById('filtro-precio').addEventListener('input', aplicarFiltros);
+    document.getElementById('filtro-calificacion').addEventListener('change', aplicarFiltros);
+    document.getElementById('orden-productos').addEventListener('change', aplicarFiltros);
     document.getElementById('filtro-disponible').addEventListener('change', aplicarFiltros);
 });

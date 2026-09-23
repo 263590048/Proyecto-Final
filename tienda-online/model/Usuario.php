@@ -104,6 +104,68 @@ class Usuario
         return $stmt->execute($params);
     }
 
+    // RF03: genera un token de recuperación para el correo indicado.
+    // Devuelve el token en claro (solo para armar el enlace) y los datos para el correo,
+    // o null si el correo no está registrado. En la base de datos se guarda únicamente su hash.
+    public function crearTokenRecuperacion(string $correo): ?array
+    {
+        $usuario = $this->obtenerPorCorreo($correo);
+        if (!$usuario) {
+            return null;
+        }
+
+        $token = bin2hex(random_bytes(32));
+
+        // Un solo enlace vigente por usuario: se invalidan los anteriores
+        $stmt = $this->pdo->prepare('UPDATE recuperaciones_password SET usado = 1 WHERE id_usuario = :id AND usado = 0');
+        $stmt->execute(['id' => $usuario['id_usuario']]);
+
+        // La expiración se calcula en MySQL para no depender de la zona horaria de PHP
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO recuperaciones_password (id_usuario, token_hash, expira)
+             VALUES (:id_usuario, :token_hash, DATE_ADD(NOW(), INTERVAL 30 MINUTE))'
+        );
+        $stmt->execute(['id_usuario' => $usuario['id_usuario'], 'token_hash' => hash('sha256', $token)]);
+
+        return ['token' => $token, 'nombre' => $usuario['nombre'], 'correo' => $usuario['correo']];
+    }
+
+    // RF03: cambia la contraseña si el token existe, no se usó y no ha vencido
+    public function restablecerPassword(string $token, string $nuevaPassword): bool
+    {
+        $this->pdo->beginTransaction();
+
+        try {
+            $stmt = $this->pdo->prepare(
+                'SELECT id_recuperacion, id_usuario FROM recuperaciones_password
+                 WHERE token_hash = :token_hash AND usado = 0 AND expira > NOW()
+                 FOR UPDATE'
+            );
+            $stmt->execute(['token_hash' => hash('sha256', $token)]);
+            $recuperacion = $stmt->fetch();
+
+            if (!$recuperacion) {
+                $this->pdo->rollBack();
+                return false;
+            }
+
+            $stmt = $this->pdo->prepare('UPDATE usuarios SET password = :password WHERE id_usuario = :id');
+            $stmt->execute([
+                'password' => password_hash($nuevaPassword, PASSWORD_DEFAULT),
+                'id' => $recuperacion['id_usuario'],
+            ]);
+
+            $stmt = $this->pdo->prepare('UPDATE recuperaciones_password SET usado = 1 WHERE id_recuperacion = :id');
+            $stmt->execute(['id' => $recuperacion['id_recuperacion']]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (Throwable $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
     // RF18: elimina un usuario
     public function eliminar(int $id): bool
     {

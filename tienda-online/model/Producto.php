@@ -11,9 +11,21 @@ class Producto
         $this->pdo = $pdo;
     }
 
+    // RF06: incluye unidades vendidas y promedio de reseñas para ordenar por popularidad
     public function obtenerTodos(): array
     {
-        $stmt = $this->pdo->query('SELECT * FROM productos WHERE estado = "activo"');
+        $stmt = $this->pdo->query(
+            'SELECT p.*,
+                    COALESCE(v.vendidos, 0) AS vendidos,
+                    r.promedio_calificacion,
+                    COALESCE(r.total_resenas, 0) AS total_resenas
+             FROM productos p
+             LEFT JOIN (SELECT id_producto, SUM(cantidad) AS vendidos
+                        FROM detalle_pedido GROUP BY id_producto) v ON v.id_producto = p.id_producto
+             LEFT JOIN (SELECT id_producto, ROUND(AVG(calificacion), 1) AS promedio_calificacion, COUNT(*) AS total_resenas
+                        FROM resenas GROUP BY id_producto) r ON r.id_producto = p.id_producto
+             WHERE p.estado = "activo"'
+        );
         return $stmt->fetchAll();
     }
 

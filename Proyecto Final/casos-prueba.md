@@ -16,6 +16,8 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | CP02 | Registro con correo duplicado | Repetir CP01 con el mismo correo | La API responde 400 con "Ya existe una cuenta con ese correo" y el formulario muestra el error | ✅ Verificado (curl) |
 | CP03 | Login con credenciales correctas | En `login.php`, ingresar el correo/contraseña de CP01 | Redirige a `index.php`; queda sesión activa (`$_SESSION['id_usuario']`) | ✅ Verificado en navegador |
 | CP04 | Login con contraseña incorrecta | Ingresar correo válido y contraseña errónea | La API responde 401 y se muestra "Correo o contraseña incorrectos" | ✅ Verificado (curl) |
+| CP04b | Recuperar contraseña | En `login.php` → "¿Olvidaste tu contraseña?", ingresar el correo, abrir el enlace (en modo desarrollo se muestra en pantalla) y fijar una contraseña nueva | Se puede iniciar sesión con la nueva contraseña y ya no con la anterior; redirige a `login.php` | ✅ Verificado (curl + navegador) 2026-09-22 |
+| CP04c | Enlace de recuperación inválido | Reusar un enlace ya usado, uno vencido (> 30 min), uno anterior a otra solicitud, o contraseñas que no coinciden | Responde 400 "El enlace no es válido o ya venció..." / "Las contraseñas no coinciden"; un correo no registrado recibe el mismo mensaje genérico | ✅ Verificado (curl) 2026-09-22 |
 | CP05 | Acceso a `api/usuarios.php` sin sesión de administrador | Hacer `GET /api/usuarios.php` sin haber iniciado sesión como admin | Responde 403 "Acceso restringido a administradores" | ✅ Verificado (curl) |
 | CP06 | Administrar usuarios | Iniciar sesión como `admin@techstore.com`, ir a panel admin → pestaña Usuarios, editar el tipo de un usuario y eliminarlo | La tabla de usuarios se actualiza sin recargar la página | ✅ Verificado (curl + navegador) |
 | CP06b | Crear usuario desde el panel | Como administrador, en admin → Usuarios → "+ Agregar usuario", llenar nombre, apellido, correo, contraseña y tipo "Administrador" | El usuario aparece en la tabla con el tipo elegido y puede iniciar sesión | ✅ Verificado (curl + navegador) 2026-09-22 |
@@ -29,6 +31,8 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | CP08 | Ver catálogo completo | Entrar a `productos.php` | Se listan los productos activos con imagen, nombre, categoría, precio y disponibilidad | |
 | CP09 | Buscar por nombre | Escribir "iphone" en el buscador del catálogo | Solo se muestran productos cuyo nombre contiene "iphone" | |
 | CP10 | Filtrar por categoría y rango de precio | Seleccionar categoría "Laptops" y un rango de precio | Solo se muestran laptops dentro del rango indicado | |
+| CP10b | Ordenar por popularidad | En `productos.php`, elegir "Ordenar por: Más vendidos" y luego "Mejor calificados" | Los productos se reordenan según unidades vendidas / promedio de reseñas; las tarjetas muestran "⭐ promedio (n) · X vendidos" | ✅ Verificado en navegador 2026-09-22 |
+| CP10c | Rango de precio y calificación | Poner precio mínimo 1000 y máximo 2000; luego "Calificación: 4 ★ o más" | Solo aparecen productos cuyo precio (de oferta, si tiene) está en el rango y cuyo promedio es ≥ 4 | ✅ Verificado en navegador 2026-09-22 |
 | CP11 | Ver detalle de producto | Hacer clic en un producto del catálogo | Se muestra `producto.php` con descripción completa, galería (imagen/imagen2) y reseñas | |
 
 ## Carrito y pedidos (RF08–RF13)
@@ -70,6 +74,8 @@ Los casos marcados ✅ ya se ejecutaron (vía `curl` contra la API y/o en el nav
 | ID | Caso de prueba | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|---|
 | CP22 | Crear producto | En admin → Productos → "Agregar producto", llenar el formulario y guardar | El producto aparece en la tabla y en el catálogo público | |
+| CP22b | Crear producto con imagen subida | En admin → "Agregar producto", elegir la categoría en el `select`, seleccionar un archivo JPG en "Imagen principal" y guardar | La vista previa aparece antes de guardar; el producto se crea con `imagen = "subidas/..."` y se ve con su foto en el catálogo | ✅ Verificado en navegador 2026-09-22 |
+| CP22c | Subida de imagen no válida | `POST /api/imagenes.php` con un archivo de texto renombrado a `.jpg`, o sin sesión de admin | Responde 400 "Formato no permitido..." / 403 respectivamente; un `.php` dentro de `subidas/` no se ejecuta (403) | ✅ Verificado (curl) 2026-09-22 |
 | CP23 | Editar producto | Editar precio/stock de un producto existente | Los cambios se reflejan de inmediato en la tabla y en `producto.php` | |
 | CP24 | Eliminar producto | Eliminar un producto desde la tabla de admin | El producto deja de aparecer en el catálogo | |
 | CP24b | Moderar reseñas | En admin → Reseñas, filtrar por "1 estrella" y eliminar una reseña | La reseña desaparece de la tabla, de `resenas.php` y del detalle del producto; el resumen se recalcula. Sin sesión de admin, `DELETE /api/resenas.php?id={id}` responde 403 | ✅ Verificado (curl + navegador) 2026-09-22 |

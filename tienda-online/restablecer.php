@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión - TechStore</title>
+    <title>Nueva contraseña - TechStore</title>
     <link rel="stylesheet" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
 </head>
 <body>
@@ -17,29 +17,28 @@
     </header>
 
     <main>
-        <form class="formulario" id="form-login">
-            <h2 style="color: var(--azul-oscuro); text-align: center;">Iniciar sesión</h2>
+        <form class="formulario" id="form-restablecer" novalidate>
+            <h2 style="color: var(--azul-oscuro); text-align: center;">Nueva contraseña</h2>
 
             <label>
-                Correo electrónico
-                <input type="email" name="correo" required>
+                Nueva contraseña
+                <input type="password" name="password" required minlength="6" autocomplete="new-password">
             </label>
             <label>
-                Contraseña
-                <input type="password" name="password" required minlength="6">
+                Confirmar contraseña
+                <input type="password" name="confirmacion" required minlength="6" autocomplete="new-password">
             </label>
 
             <p class="mensaje-error" id="mensaje-error"></p>
+            <div class="aviso-pago exito oculto" id="mensaje-restablecer"></div>
 
-            <a href="recuperar.php" style="font-size: 0.8rem; color: var(--acento); align-self: flex-end;">¿Olvidaste tu contraseña?</a>
-
-            <button type="submit">Ingresar</button>
+            <button type="submit">Guardar contraseña</button>
             <p style="text-align: center; font-size: 0.85rem; color: var(--texto-suave);">
-                ¿No tienes cuenta? <a href="registro.php" style="color: var(--acento);">Regístrate</a>
+                <a href="recuperar.php" style="color: var(--acento);">Solicitar un enlace nuevo</a>
             </p>
         </form>
     </main>
 
-    <script src="assets/js/auth.js?v=<?php echo filemtime(__DIR__ . '/assets/js/auth.js'); ?>"></script>
+    <script src="assets/js/recuperar.js?v=<?php echo filemtime(__DIR__ . '/assets/js/recuperar.js'); ?>"></script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+# Carpeta de imágenes subidas desde el panel: nunca se ejecuta código aquí
+<FilesMatch "\.(php|phtml|phar|phps|cgi|pl|py)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes

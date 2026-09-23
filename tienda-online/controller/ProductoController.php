@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../model/Producto.php';
+require_once __DIR__ . '/../model/Imagen.php';
 
 class ProductoController
 {
@@ -33,5 +34,10 @@ class ProductoController
     public function eliminar(int $id): bool
     {
         return $this->modelo->eliminar($id);
+    }
+
+    public function subirImagen(array $archivo): string
+    {
+        return (new Imagen())->guardar($archivo);
     }
 }

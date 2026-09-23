@@ -3,3 +3,8 @@
 # Carpeta de trabajo con fotos en bruto (duplicados y descartes antes de
 # organizarlas en tienda-online/assets/img/); no es parte del sitio.
 /Imagenes/
+
+# Imágenes que el administrador sube desde el panel (datos de la tienda, no código)
+/tienda-online/assets/img/productos/subidas/*
+!/tienda-online/assets/img/productos/subidas/.gitkeep
+!/tienda-online/assets/img/productos/subidas/.htaccess

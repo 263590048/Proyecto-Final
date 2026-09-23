@@ -156,8 +156,10 @@
                 <input type="text" name="nombre" required>
             </label>
             <label>
-                Categoría (ID)
-                <input type="number" name="id_categoria" required min="1">
+                Categoría
+                <select name="id_categoria" id="select-categoria-producto" required>
+                    <option value="">Cargando categorías...</option>
+                </select>
             </label>
             <label>
                 Descripción
@@ -175,14 +177,19 @@
                 Cantidad
                 <input type="number" name="cantidad" required min="0">
             </label>
-            <label>
-                Imagen (nombre de archivo)
-                <input type="text" name="imagen">
-            </label>
-            <label>
-                Imagen 2 (nombre de archivo, opcional)
-                <input type="text" name="imagen2">
-            </label>
+            <div class="campo-imagen">
+                <span>Imagen principal</span>
+                <div class="vista-previa-imagen" id="vista-previa-imagen">Sin imagen</div>
+                <input type="hidden" name="imagen">
+                <input type="file" id="archivo-imagen" accept="image/jpeg,image/png,image/webp">
+            </div>
+            <div class="campo-imagen">
+                <span>Imagen 2 (opcional, se muestra al pasar el mouse)</span>
+                <div class="vista-previa-imagen" id="vista-previa-imagen2">Sin imagen</div>
+                <input type="hidden" name="imagen2">
+                <input type="file" id="archivo-imagen2" accept="image/jpeg,image/png,image/webp">
+            </div>
+            <p class="ayuda-pago">JPG, PNG o WEBP de hasta 3 MB. Si no eliges un archivo nuevo se conserva la imagen actual.</p>
             <label>
                 Estado
                 <select name="estado">
