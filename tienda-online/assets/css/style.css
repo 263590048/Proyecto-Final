@@ -1331,6 +1331,32 @@ form.formulario select {
     margin-top: 0.3rem;
 }
 
+.selector-estrellas {
+    display: flex;
+    gap: 0.15rem;
+}
+
+.estrella-input {
+    background: none;
+    border: none;
+    padding: 0.1rem;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    filter: grayscale(1);
+    opacity: 0.45;
+}
+
+.estrella-input.activa {
+    filter: none;
+    opacity: 1;
+}
+
+.estrella-input:hover {
+    filter: none;
+    opacity: 1;
+}
+
 /* Historial de pedidos (RF12) */
 
 .tarjeta-pedido {

@@ -176,7 +176,7 @@ function renderizarResenas(idProducto, resenas, resumen, puedeResenar) {
         <div class="resena">
             <div class="resena-cabecera">
                 <strong>${resena.nombre} ${resena.apellido}</strong>
-                <span class="resena-estrellas">${'★'.repeat(resena.calificacion)}${'☆'.repeat(5 - resena.calificacion)}</span>
+                <span class="resena-estrellas">${'⭐️'.repeat(resena.calificacion)}${'☆'.repeat(5 - resena.calificacion)}</span>
             </div>
             ${resena.comentario ? `<p>${resena.comentario}</p>` : ''}
         </div>
@@ -192,13 +192,12 @@ function renderizarResenas(idProducto, resenas, resumen, puedeResenar) {
             <form class="formulario" id="form-resena" style="max-width: 100%; margin: 1.5rem 0 0; box-shadow: none; padding: 0;">
                 <label>
                     Calificación
-                    <select name="calificacion" required>
-                        <option value="5">5 - Excelente</option>
-                        <option value="4">4 - Muy bueno</option>
-                        <option value="3">3 - Bueno</option>
-                        <option value="2">2 - Regular</option>
-                        <option value="1">1 - Malo</option>
-                    </select>
+                    <div class="selector-estrellas" id="selector-estrellas">
+                        ${[1, 2, 3, 4, 5].map(valor => `
+                            <button type="button" class="estrella-input activa" data-valor="${valor}" aria-label="${valor} estrella${valor === 1 ? '' : 's'}">⭐️</button>
+                        `).join('')}
+                    </div>
+                    <input type="hidden" name="calificacion" id="input-calificacion" value="5">
                 </label>
                 <label>
                     Comentario
@@ -218,6 +217,19 @@ function renderizarResenas(idProducto, resenas, resumen, puedeResenar) {
             ${formularioHtml}
         </div>
     `;
+
+    const selectorEstrellas = document.getElementById('selector-estrellas');
+    if (selectorEstrellas) {
+        selectorEstrellas.querySelectorAll('.estrella-input').forEach(boton => {
+            boton.addEventListener('click', () => {
+                const valor = Number(boton.dataset.valor);
+                document.getElementById('input-calificacion').value = valor;
+                selectorEstrellas.querySelectorAll('.estrella-input').forEach(otro => {
+                    otro.classList.toggle('activa', Number(otro.dataset.valor) <= valor);
+                });
+            });
+        });
+    }
 
     const form = document.getElementById('form-resena');
     if (form) {
