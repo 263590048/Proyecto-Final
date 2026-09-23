@@ -12,7 +12,7 @@ class Resena
     }
 
     // RF07/RF14: solo puede reseñar quien ya compró el producto
-    private function usuarioComproProducto(int $idUsuario, int $idProducto): bool
+    public function usuarioComproProducto(int $idUsuario, int $idProducto): bool
     {
         $stmt = $this->pdo->prepare(
             'SELECT COUNT(*) FROM detalle_pedido dp

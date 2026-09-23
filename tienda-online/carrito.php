@@ -46,7 +46,6 @@
                 <div class="fila"><span>Envío</span><span>Gratis</span></div>
                 <div class="total"><span>Total</span><span id="total">Q0.00</span></div>
                 <button id="btn-finalizar" class="btn-acento" onclick="finalizarCompra()">Finalizar compra</button>
-                <!-- TODO: al confirmar, POST a api/pedidos.php para registrar el pedido (RF11, RF13) - Persona A/backend -->
             </div>
         </div>
     </main>

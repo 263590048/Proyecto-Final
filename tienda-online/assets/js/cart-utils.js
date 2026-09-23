@@ -151,6 +151,11 @@ function vaciarCarrito() {
     guardarCarrito([]);
 }
 
+// Usado tras registrar un pedido con éxito: vacía sin pedir confirmación
+function vaciarCarritoSinConfirmar() {
+    guardarCarrito([]);
+}
+
 function calcularTotal(carrito) {
     return carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
 }
@@ -296,3 +301,47 @@ document.addEventListener('click', () => {
 });
 
 document.addEventListener('DOMContentLoaded', cargarMenuCategorias);
+
+// Estado de sesión en el header (compartido entre páginas)
+
+async function actualizarEstadoSesion() {
+    const enlaceSesion = document.querySelector('nav a.boton');
+    if (!enlaceSesion) return;
+
+    try {
+        const respuesta = await fetch('api/auth.php');
+        if (!respuesta.ok) return; // no hay sesión activa: se deja "Iniciar sesión"
+
+        const usuario = await respuesta.json();
+        const destino = usuario.tipo_usuario === 'administrador' ? 'admin.php' : 'mis-pedidos.php';
+
+        enlaceSesion.textContent = `Hola, ${usuario.nombre}`;
+        enlaceSesion.setAttribute('href', destino);
+
+        const enlaceSalir = document.createElement('a');
+        enlaceSalir.href = '#';
+        enlaceSalir.textContent = 'Salir';
+        enlaceSalir.addEventListener('click', cerrarSesion);
+        enlaceSesion.insertAdjacentElement('beforebegin', enlaceSalir);
+
+        if (usuario.tipo_usuario !== 'administrador') {
+            const enlaceDeseos = document.createElement('a');
+            enlaceDeseos.href = 'lista-deseos.php';
+            enlaceDeseos.textContent = '♡ Mi lista';
+            enlaceSesion.insertAdjacentElement('beforebegin', enlaceDeseos);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function cerrarSesion(evento) {
+    evento.preventDefault();
+    try {
+        await fetch('api/auth.php', { method: 'DELETE' });
+    } finally {
+        window.location.href = 'index.php';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', actualizarEstadoSesion);

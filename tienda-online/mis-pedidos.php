@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del producto - TechStore</title>
+    <title>Mis pedidos - TechStore</title>
     <link rel="stylesheet" href="assets/css/style.css?v=<?php echo filemtime(__DIR__ . '/assets/css/style.css'); ?>">
 </head>
 <body>
@@ -33,11 +33,10 @@
     </header>
 
     <main>
-        <div id="detalle-producto">
-            <p>Cargando producto...</p>
+        <h2 style="color: var(--azul-oscuro); margin-bottom: 1.5rem;">Mis pedidos</h2>
+        <div id="lista-pedidos">
+            <p>Cargando pedidos...</p>
         </div>
-
-        <section id="seccion-resenas" class="seccion-resenas"></section>
     </main>
 
     <footer class="footer-tienda">
@@ -74,6 +73,6 @@
     </footer>
 
     <script src="assets/js/cart-utils.js?v=<?php echo filemtime(__DIR__ . '/assets/js/cart-utils.js'); ?>"></script>
-    <script src="assets/js/producto.js?v=<?php echo filemtime(__DIR__ . '/assets/js/producto.js'); ?>"></script>
+    <script src="assets/js/mis-pedidos.js?v=<?php echo filemtime(__DIR__ . '/assets/js/mis-pedidos.js'); ?>"></script>
 </body>
 </html>

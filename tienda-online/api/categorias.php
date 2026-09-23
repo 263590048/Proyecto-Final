@@ -2,12 +2,20 @@
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../controller/CategoriaController.php';
 
+session_start();
+
+function esAdministrador(): bool
+{
+    return ($_SESSION['tipo_usuario'] ?? null) === 'administrador';
+}
+
 $controller = new CategoriaController();
 $metodo = $_SERVER['REQUEST_METHOD'];
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 
 switch ($metodo) {
     case 'GET':
+        // Consultar categorías es público, no requiere sesión
         if ($id) {
             $categoria = $controller->detalle($id);
             if (!$categoria) {
@@ -21,8 +29,13 @@ switch ($metodo) {
         }
         break;
 
-    // RF17: administrar categorías
+    // RF17: administrar categorías (solo administradores)
     case 'POST':
+        if (!esAdministrador()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Acceso restringido a administradores']);
+            break;
+        }
         $datos = json_decode(file_get_contents('php://input'), true) ?? [];
         try {
             $nuevoId = $controller->crear($datos);
@@ -35,6 +48,11 @@ switch ($metodo) {
         break;
 
     case 'PUT':
+        if (!esAdministrador()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Acceso restringido a administradores']);
+            break;
+        }
         if (!$id) {
             http_response_code(400);
             echo json_encode(['error' => 'Debe indicar id']);
@@ -51,6 +69,11 @@ switch ($metodo) {
         break;
 
     case 'DELETE':
+        if (!esAdministrador()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Acceso restringido a administradores']);
+            break;
+        }
         if (!$id) {
             http_response_code(400);
             echo json_encode(['error' => 'Debe indicar id']);

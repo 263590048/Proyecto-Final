@@ -1302,6 +1302,84 @@ form.formulario select {
     min-height: 1rem;
 }
 
+/* Reseñas de producto (RF14) */
+
+.resena {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--borde);
+}
+
+.resena:last-of-type {
+    border-bottom: none;
+}
+
+.resena-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.resena-estrellas {
+    color: #f5a623;
+    letter-spacing: 1px;
+}
+
+.resena p {
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+
+/* Historial de pedidos (RF12) */
+
+.tarjeta-pedido {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.pedido-cabecera {
+    width: 100%;
+    background: none;
+    color: var(--texto);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    cursor: pointer;
+}
+
+.badge-estado {
+    background: var(--fondo);
+    color: var(--azul-oscuro);
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+.pedido-detalle {
+    border-top: 1px solid var(--borde);
+    padding: 1rem 1.5rem;
+}
+
+.pedido-detalle.oculto {
+    display: none;
+}
+
+.pedido-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+}
+
 .mensaje-exito {
     color: #16a34a;
     font-size: 0.85rem;

@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', cargarTablaProductos);
 const cargasPorSeccion = {
     categorias: () => cargarTablaCategorias(),
     usuarios: () => cargarTablaUsuarios(),
+    pedidos: () => cargarTablaPedidos(),
 };
 const seccionesCargadas = new Set(['productos']);
 
@@ -290,6 +291,72 @@ async function eliminarUsuario(id) {
         cargarTablaUsuarios();
     } catch (error) {
         alert('No se pudo eliminar el usuario.');
+        console.error(error);
+    }
+}
+
+// Gestión de pedidos (RF13), consumiendo api/pedidos.php
+
+const ESTADOS_PEDIDO = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'];
+
+async function cargarTablaPedidos() {
+    const cuerpo = document.getElementById('cuerpo-tabla-pedidos');
+
+    try {
+        const respuesta = await fetch('api/pedidos.php?todos=1');
+        if (!respuesta.ok) {
+            cuerpo.innerHTML = '<tr><td colspan="6">Debes iniciar sesión como administrador para ver los pedidos.</td></tr>';
+            return;
+        }
+        const pedidos = await respuesta.json();
+
+        if (pedidos.length === 0) {
+            cuerpo.innerHTML = '<tr><td colspan="6">No hay pedidos registrados.</td></tr>';
+            return;
+        }
+
+        cuerpo.innerHTML = pedidos.map(pedido => `
+            <tr>
+                <td>${pedido.id_pedido}</td>
+                <td>${pedido.nombre} ${pedido.apellido}<br><small>${pedido.correo}</small></td>
+                <td>${pedido.fecha}</td>
+                <td>Q${Number(pedido.total).toFixed(2)}</td>
+                <td>
+                    <select id="estado-pedido-${pedido.id_pedido}">
+                        ${ESTADOS_PEDIDO.map(estado => `
+                            <option value="${estado}" ${estado === pedido.estado ? 'selected' : ''}>${estado}</option>
+                        `).join('')}
+                    </select>
+                </td>
+                <td class="acciones">
+                    <button class="btn-secundario" onclick="actualizarEstadoPedido(event, ${pedido.id_pedido})">Guardar</button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        cuerpo.innerHTML = '<tr><td colspan="6">No se pudieron cargar los pedidos.</td></tr>';
+        console.error(error);
+    }
+}
+
+async function actualizarEstadoPedido(evento, idPedido) {
+    const estado = document.getElementById(`estado-pedido-${idPedido}`).value;
+    const boton = evento.target;
+    const textoOriginal = boton.textContent;
+
+    try {
+        const respuesta = await fetch(`api/pedidos.php?id=${idPedido}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado })
+        });
+
+        if (!respuesta.ok) throw new Error('No se pudo actualizar');
+
+        boton.textContent = '✓ Guardado';
+        setTimeout(() => { boton.textContent = textoOriginal; }, 1500);
+    } catch (error) {
+        alert('No se pudo actualizar el estado del pedido.');
         console.error(error);
     }
 }

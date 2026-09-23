@@ -41,7 +41,7 @@ CREATE TABLE pedidos (
     id_usuario INT NOT NULL,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
     total DECIMAL(10,2) NOT NULL,
-    estado ENUM('pendiente', 'pagado', 'enviado', 'entregado', 'cancelado') NOT NULL DEFAULT 'pendiente',
+    estado ENUM('pendiente', 'procesando', 'enviado', 'entregado', 'cancelado') NOT NULL DEFAULT 'pendiente',
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
@@ -70,6 +70,7 @@ CREATE TABLE wishlist (
     id_wishlist INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_producto INT NOT NULL,
+    UNIQUE KEY unique_wishlist (id_usuario, id_producto),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
 );
@@ -241,5 +242,55 @@ UPDATE productos SET imagen2 = 'hub_usbc_2.png' WHERE imagen = 'hub_usbc.png';
 
 UPDATE productos SET imagen = 'funda_iphone15_2.jpg', imagen2 = 'funda_iphone15.jpg' WHERE nombre = 'Funda para iPhone 15';
 
+-- Productos agregados desde el panel de administración (quedan con id 61-65)
+INSERT INTO productos (id_categoria, nombre, descripcion, precio, precio_oferta, cantidad, imagen, imagen2, estado) VALUES
+(1, 'iPhone 15 Pro Max', 'Apple iPhone 15 Pro Max de 256GB, color Titanio Natural.', 12000.00, 11500.00, 15, 'iphone15.webp', NULL, 'activo'),
+(2, 'MacBook Pro M3', 'Laptop Apple MacBook Pro 14 pulgadas con chip M3.', 15500.00, NULL, 8, 'macbook_m3.jpeg', NULL, 'activo'),
+(3, 'AirPods Pro 2 (nuevo)', 'Audífonos inalámbricos Apple con cancelación de ruido.', 2100.00, 1899.00, 25, 'airpods_pro2.png', 'airpods_caja.jpg', 'activo'),
+(6, 'Cargador Anker 65W', 'Cargador rápido USB-C de 65W, compatible con laptops y celulares.', 350.00, NULL, 50, 'anker_65w.webp', NULL, 'activo'),
+(1, 'Samsung Galaxy S24 Ultra', 'Samsung S24 Ultra 512GB, cámara de 200MP, incluye S-Pen.', 11000.00, 10500.00, 10, 's24_ultra.jpeg', 's24_ultra_back.webp', 'activo');
+
 INSERT INTO usuarios (nombre, apellido, correo, password, telefono, direccion, tipo_usuario) VALUES
-('Admin', 'Sistema', 'admin@techstore.com', '$2y$10$examplehashvalueaquiXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', '00000000', 'Oficina central', 'administrador');
+('Admin', 'Sistema', 'admin@techstore.com', '$2y$10$.CEFz5DfGFgXXfzLE18Fe.xFBxR1vwh/Hi2x0KqblF4woG2XEr5wC', '00000000', 'Oficina central', 'administrador');
+
+-- Clientes de prueba (quedan con id 2-6, en este orden, en una importación nueva)
+INSERT INTO usuarios (nombre, apellido, correo, password, telefono, direccion, tipo_usuario) VALUES
+('Juan', 'Pérez', 'juan@correo.com', '$2y$10$K9Wn/6U.TqYQJ8P6g25Z9eO7x/g1.mR8T.oU.lB3/c1v8fN2D1QOG', '55551111', 'Zona 1, Ciudad', 'cliente'),
+('María', 'Gómez', 'maria@correo.com', '$2y$10$K9Wn/6U.TqYQJ8P6g25Z9eO7x/g1.mR8T.oU.lB3/c1v8fN2D1QOG', '55552222', 'Zona 10, Ciudad', 'cliente'),
+('Carlos', 'López', 'carlos@correo.com', '$2y$10$K9Wn/6U.TqYQJ8P6g25Z9eO7x/g1.mR8T.oU.lB3/c1v8fN2D1QOG', '55553333', 'Antigua Guatemala', 'cliente'),
+('Ana', 'Martínez', 'ana@correo.com', '$2y$10$K9Wn/6U.TqYQJ8P6g25Z9eO7x/g1.mR8T.oU.lB3/c1v8fN2D1QOG', '55554444', 'Quetzaltenango', 'cliente'),
+('Lucia', 'Prueba', 'lucia@correo.com', '$2y$10$jHJ6MOenD0YnCLBjbxTiKu3BYbmJR8I2mXRLp0LgFucJF1BpLMS6O', '12345678', 'cuidad', 'cliente');
+
+-- Pedidos de ejemplo de los clientes de prueba, en distintos estados
+-- (id_usuario 2=Juan, 3=María, 4=Carlos, 5=Ana; quedan con id_pedido 1-5)
+INSERT INTO pedidos (id_usuario, fecha, total, estado) VALUES
+(2, '2026-09-10 10:30:00', 12000.00, 'entregado'),
+(3, '2026-09-12 14:15:00', 2100.00, 'enviado'),
+(4, '2026-09-15 09:45:00', 15850.00, 'procesando'),
+(5, '2026-09-16 11:20:00', 11000.00, 'pendiente'),
+(2, '2026-09-17 16:50:00', 350.00, 'pendiente');
+
+-- Detalle de cada pedido de ejemplo (id_pedido 1-5 en el mismo orden de arriba)
+INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio) VALUES
+(1, 61, 1, 12000.00),
+(2, 63, 1, 2100.00),
+(3, 62, 1, 15500.00),
+(3, 64, 1, 350.00),
+(4, 65, 1, 11000.00),
+(5, 64, 1, 350.00);
+
+-- Reseñas de ejemplo (solo de productos que el cliente ya compró, según RF14)
+INSERT INTO resenas (id_usuario, id_producto, calificacion, comentario, fecha) VALUES
+(2, 61, 5, 'Excelente teléfono, la cámara es increíble y la batería dura todo el día.', '2026-09-12 08:00:00'),
+(3, 63, 4, 'Muy buen sonido, pero siento que el precio es un poco elevado.', '2026-09-14 10:00:00'),
+(2, 64, 5, 'Carga mi celular y laptop súper rápido. Totalmente recomendado.', '2026-09-18 09:30:00'),
+(4, 62, 5, 'La mejor inversión para mi trabajo. Súper rápida y la pantalla es hermosa.', '2026-09-20 15:20:00'),
+(5, 65, 5, 'Me encanta el diseño y el S-Pen es muy útil para notas rápidas.', '2026-09-22 11:10:00');
+
+-- Listas de deseos de ejemplo
+INSERT INTO wishlist (id_usuario, id_producto) VALUES
+(2, 62),
+(2, 65),
+(3, 61),
+(4, 63),
+(5, 64);

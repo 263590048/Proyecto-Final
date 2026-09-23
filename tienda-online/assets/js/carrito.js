@@ -47,10 +47,47 @@ function vaciarYRenderizar() {
     renderizarCarrito();
 }
 
-function finalizarCompra() {
-    // TODO: reemplazar por un POST real a api/pedidos.php cuando el backend
-    // implemente RF11 (registrar pedido) y RF13 (proceso de pago).
-    alert('Backend pendiente: aquí se enviará el pedido a api/pedidos.php');
+async function finalizarCompra() {
+    const carrito = obtenerCarrito();
+    if (carrito.length === 0) return;
+
+    const boton = document.getElementById('btn-finalizar');
+    boton.disabled = true;
+    const textoOriginal = boton.textContent;
+    boton.textContent = 'Procesando...';
+
+    try {
+        const respuesta = await fetch('api/pedidos.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                items: carrito.map(item => ({ id_producto: item.id_producto, cantidad: item.cantidad }))
+            })
+        });
+
+        if (respuesta.status === 401) {
+            alert('Debes iniciar sesión para completar tu compra.');
+            window.location.href = 'login.php';
+            return;
+        }
+
+        const datos = await respuesta.json().catch(() => ({}));
+
+        if (!respuesta.ok) {
+            alert(datos.error || 'No se pudo completar el pedido.');
+            return;
+        }
+
+        vaciarCarritoSinConfirmar();
+        alert(`¡Pedido #${datos.id_pedido} registrado con éxito!`);
+        window.location.href = 'index.php';
+    } catch (error) {
+        alert('No se pudo conectar con el servidor.');
+        console.error(error);
+    } finally {
+        boton.disabled = false;
+        boton.textContent = textoOriginal;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', renderizarCarrito);

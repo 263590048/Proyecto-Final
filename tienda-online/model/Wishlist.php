@@ -52,7 +52,8 @@ class Wishlist
     public function obtenerPorUsuario(int $idUsuario): array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT w.id_wishlist, p.id_producto, p.nombre, p.precio, p.precio_oferta, p.imagen, p.estado
+            'SELECT w.id_wishlist, p.id_producto, p.id_categoria, p.nombre, p.precio, p.precio_oferta,
+                    p.cantidad, p.imagen, p.imagen2, p.estado
              FROM wishlist w
              JOIN productos p ON p.id_producto = w.id_producto
              WHERE w.id_usuario = :id_usuario'

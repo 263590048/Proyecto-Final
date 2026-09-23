@@ -20,6 +20,11 @@ class PedidoController
         return $this->modelo->obtenerPorUsuario($idUsuario);
     }
 
+    public function listarTodos(): array
+    {
+        return $this->modelo->obtenerTodos();
+    }
+
     public function detalle(int $idPedido): ?array
     {
         return $this->modelo->obtenerPorId($idPedido);

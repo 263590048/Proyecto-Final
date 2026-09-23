@@ -5,7 +5,7 @@ class Pedido
 {
     private PDO $pdo;
 
-    private const ESTADOS_VALIDOS = ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado'];
+    private const ESTADOS_VALIDOS = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'];
 
     public function __construct()
     {
@@ -107,6 +107,18 @@ class Pedido
             'SELECT * FROM pedidos WHERE id_usuario = :id_usuario ORDER BY fecha DESC'
         );
         $stmt->execute(['id_usuario' => $idUsuario]);
+        return $stmt->fetchAll();
+    }
+
+    // RF13: todos los pedidos, para el panel de administración
+    public function obtenerTodos(): array
+    {
+        $stmt = $this->pdo->query(
+            'SELECT p.*, u.nombre, u.apellido, u.correo
+             FROM pedidos p
+             JOIN usuarios u ON u.id_usuario = p.id_usuario
+             ORDER BY p.fecha DESC'
+        );
         return $stmt->fetchAll();
     }
 

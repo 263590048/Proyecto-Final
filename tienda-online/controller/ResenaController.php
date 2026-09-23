@@ -22,4 +22,10 @@ class ResenaController
             'resumen' => $this->modelo->obtenerResumen($idProducto),
         ];
     }
+
+    // Para que el frontend sepa si debe mostrar el formulario de reseña
+    public function puedeResenar(int $idUsuario, int $idProducto): bool
+    {
+        return $this->modelo->usuarioComproProducto($idUsuario, $idProducto);
+    }
 }

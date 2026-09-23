@@ -2,23 +2,28 @@
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../controller/WishlistController.php';
 
+session_start();
+
 $controller = new WishlistController();
 $metodo = $_SERVER['REQUEST_METHOD'];
-$idUsuario = isset($_GET['id_usuario']) ? (int) $_GET['id_usuario'] : null;
 $idProducto = isset($_GET['id_producto']) ? (int) $_GET['id_producto'] : null;
+
+if (empty($_SESSION['id_usuario'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Debes iniciar sesión para usar la lista de deseos']);
+    exit;
+}
+
+$idUsuario = (int) $_SESSION['id_usuario'];
 
 switch ($metodo) {
     case 'GET':
-        if (!$idUsuario) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Debe indicar id_usuario']);
-            break;
-        }
         echo json_encode($controller->listar($idUsuario));
         break;
 
     case 'POST':
         $datos = json_decode(file_get_contents('php://input'), true) ?? [];
+        $datos['id_usuario'] = $idUsuario;
         try {
             $nuevoId = $controller->agregar($datos);
             http_response_code(201);
@@ -30,9 +35,9 @@ switch ($metodo) {
         break;
 
     case 'DELETE':
-        if (!$idUsuario || !$idProducto) {
+        if (!$idProducto) {
             http_response_code(400);
-            echo json_encode(['error' => 'Debe indicar id_usuario e id_producto']);
+            echo json_encode(['error' => 'Debe indicar id_producto']);
             break;
         }
         $controller->eliminar($idUsuario, $idProducto);
