@@ -129,14 +129,11 @@ function renderizarProductos(productos) {
     `).join('');
 }
 
-// Popularidad visible en la tarjeta: promedio de reseñas y unidades vendidas (RF06)
+// Popularidad visible en la tarjeta: promedio de reseñas (RF06)
 function popularidadHtml(producto) {
     const partes = [];
     if (producto.total_resenas > 0) {
         partes.push(`⭐ ${Number(producto.promedio_calificacion).toFixed(1)} (${producto.total_resenas})`);
-    }
-    if (Number(producto.vendidos) > 0) {
-        partes.push(`${producto.vendidos} vendido${Number(producto.vendidos) === 1 ? '' : 's'}`);
     }
     return partes.length ? `<p class="popularidad-producto">${partes.join(' · ')}</p>` : '';
 }
