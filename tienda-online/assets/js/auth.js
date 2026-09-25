@@ -6,6 +6,23 @@ function mostrarError(mensaje) {
     if (elemento) elemento.textContent = mensaje;
 }
 
+// Página a la que se regresa después de iniciar sesión (ej. checkout.php).
+// Solo se aceptan páginas .php locales para no redirigir a sitios externos.
+const parametros = new URLSearchParams(window.location.search);
+const paginaVolver = /^[a-z0-9-]+\.php$/i.test(parametros.get('volver') || '') ? parametros.get('volver') : null;
+const sufijoVolver = paginaVolver ? `volver=${encodeURIComponent(paginaVolver)}` : '';
+
+// Los enlaces entre login y registro conservan la página de regreso
+document.querySelectorAll('a[href="login.php"], a[href="registro.php"]').forEach((enlace) => {
+    if (sufijoVolver) enlace.href = `${enlace.getAttribute('href')}?${sufijoVolver}`;
+});
+
+// Aviso de cuenta creada al llegar desde el registro
+const mensajeExito = document.getElementById('mensaje-exito');
+if (mensajeExito && parametros.has('registrado')) {
+    mensajeExito.textContent = '¡Cuenta creada con éxito! Ya puedes iniciar sesión.';
+}
+
 const formLogin = document.getElementById('form-login');
 if (formLogin) {
     formLogin.addEventListener('submit', async (evento) => {
@@ -27,7 +44,7 @@ if (formLogin) {
                 return;
             }
 
-            window.location.href = 'index.php';
+            window.location.href = paginaVolver || 'index.php';
         } catch (error) {
             mostrarError('No se pudo conectar con el servidor.');
             console.error(error);
@@ -56,7 +73,7 @@ if (formRegistro) {
                 return;
             }
 
-            window.location.href = 'login.php';
+            window.location.href = `login.php?registrado=1${sufijoVolver ? '&' + sufijoVolver : ''}`;
         } catch (error) {
             mostrarError('No se pudo conectar con el servidor.');
             console.error(error);

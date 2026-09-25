@@ -20,6 +20,8 @@
         <form class="formulario" id="form-login">
             <h2 style="color: var(--azul-oscuro); text-align: center;">Iniciar sesión</h2>
 
+            <p class="mensaje-exito" id="mensaje-exito" style="text-align: center;"></p>
+
             <label>
                 Correo electrónico
                 <input type="email" name="correo" required>

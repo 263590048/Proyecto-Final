@@ -33,7 +33,7 @@ async function cargarDatosCliente() {
         const respuesta = await fetch('api/auth.php');
         if (respuesta.status === 401) {
             alert('Debes iniciar sesión para completar tu compra.');
-            window.location.href = 'login.php';
+            window.location.href = 'login.php?volver=checkout.php';
             return;
         }
         const usuario = await respuesta.json();
