@@ -12,7 +12,6 @@
         <nav>
             <a href="index.php">Inicio</a>
             <a href="productos.php">Catálogo</a>
-            <a href="resenas.php">Reseñas</a>
         </nav>
     </header>
 

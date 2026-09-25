@@ -24,7 +24,6 @@
         <nav>
             <a href="index.php">Inicio</a>
             <a href="productos.php">Catálogo</a>
-            <a href="resenas.php">Reseñas</a>
             <div class="menu-carrito">
                 <button class="btn-carrito-nav" onclick="toggleMenuCarrito(event)">Carrito (<span id="contador-carrito">0</span>)</button>
                 <div class="panel-carrito-mini" id="panel-carrito-mini"></div>

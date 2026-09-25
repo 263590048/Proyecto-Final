@@ -24,7 +24,6 @@
         <nav>
             <a href="index.php">Inicio</a>
             <a href="productos.php">Catálogo</a>
-            <a href="resenas.php">Reseñas</a>
             <a href="carrito.php" class="activo">Carrito (<span id="contador-carrito">0</span>)</a>
             <a href="login.php" class="boton">Iniciar sesión</a>
         </nav>
