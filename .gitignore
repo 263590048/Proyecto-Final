@@ -1,0 +1,11 @@
+.DS_Store
+/Imagenes/
+/Proyecto Final/
+/api-contract.md
+/database/*.md
+/database/*.png
+/database/migracion-*.sql
+
+/tienda-online/assets/img/productos/subidas/*
+!/tienda-online/assets/img/productos/subidas/.gitkeep
+!/tienda-online/assets/img/productos/subidas/.htaccess
